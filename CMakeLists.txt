@@ -13,7 +13,7 @@ find_path(STB_INCLUDE_DIRS "stb_c_lexer.h")
 add_executable(
         ZRenderer src/main/ZRenderer.cpp
         src/camera/camera.hpp
-)
+        src/core/Parser.hpp src/core/Scene.hpp src/accelerator/BVHTree.hpp)
 
 target_link_libraries(ZRenderer PRIVATE Eigen3::Eigen)
 target_link_libraries(ZRenderer PRIVATE TBB::tbb TBB::tbbmalloc TBB::tbbmalloc_proxy)

@@ -3,13 +3,15 @@
 //
 
 #include <iostream>
-#include <Eigen/Eigen>
 
-int main()
+int main(int argc, char* argv[])
 {
-    std::cout<<"hello world\n";
-	Eigen::Vector2f vec;
-	vec << 1, 2;
-	std::cout<<vec<<"\n";
+    if(argc==1)
+	{
+		std::cout<<"no input\n";
+		return 0;
+	}
+	Parser parser;
+	Scene scene = parser.get_scene(argv[1]);
     return 0;
 }
