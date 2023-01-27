@@ -1,6 +1,6 @@
+#pragma once
 
-
-namespace ZRenderer
+namespace ZR
 {
 	class Scene
 	{

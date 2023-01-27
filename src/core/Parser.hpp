@@ -1,10 +1,12 @@
+#pragma once
+
 #include <string>
 #include "Scene.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 
 
-namespace ZRenderer
+namespace ZR
 {
 	class Parser
 	{
