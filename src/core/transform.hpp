@@ -1,10 +1,12 @@
 #pragma once
 
 #include <Eigen/Eigen>
+#include "geometry.hpp"
 
 namespace ZR
 {
-	class Transform {
+	class Transform
+	{
 	public:
 		// Transform Public Methods
 		Transform() {}
@@ -22,7 +24,7 @@ namespace ZR
 			return Transform(t.mInv, t.m);
 		}
 		friend Transform Transpose(const Transform &t) {
-			return Transform(Transpose(t.m), Transpose(t.mInv));
+			return Transform(t.m.transpose(), t.mInv.transpose());
 		}
 		bool operator==(const Transform &t) const {
 			return t.m == m && t.mInv == mInv;

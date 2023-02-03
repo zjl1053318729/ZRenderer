@@ -24,7 +24,16 @@ namespace ZR
 		virtual bool IntersectP(const Ray &r) const;
 		GeometricPrimitive(const std::shared_ptr<Shape> &shape);
 		void ComputeScatteringFunctions() const {}
+
 	private:
 		std::shared_ptr<Shape> shape;
 	};
+
+	class Aggregate : public Primitive {
+	public:
+		// Aggregate Public Methods
+		void ComputeScatteringFunctions() const {}
+
+	};
+
 }

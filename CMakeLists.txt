@@ -13,7 +13,7 @@ find_path(STB_INCLUDE_DIRS "stb_c_lexer.h")
 add_executable(
         ZRenderer src/main/ZRenderer.cpp
         src/core/camera.hpp
-        src/core/Parser.hpp src/core/Scene.hpp src/accelerator/BVHTree.hpp src/core/geometry.hpp src/core/ZRender.hpp src/core/intersection.hpp src/core/primitive.hpp src/shape/shape.hpp src/core/transform.hpp)
+        src/core/Parser.hpp src/core/Scene.hpp src/accelerator/BVHAccel.hpp src/core/geometry.hpp src/core/ZRender.hpp src/core/intersection.hpp src/core/primitive.hpp src/shape/shape.hpp src/core/transform.hpp src/shape/sphere.hpp src/shape/triangle.hpp)
 
 target_link_libraries(ZRenderer PRIVATE Eigen3::Eigen)
 target_link_libraries(ZRenderer PRIVATE TBB::tbb TBB::tbbmalloc TBB::tbbmalloc_proxy)
