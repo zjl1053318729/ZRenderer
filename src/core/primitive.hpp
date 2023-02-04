@@ -8,31 +8,38 @@
 
 namespace ZR
 {
-	class Primitive {
+	class Primitive
+	{
 	public:
 		virtual ~Primitive();
 		virtual Bounds3 WorldBound() const = 0;
-		virtual bool Intersect(const Ray &r, SurfaceInteraction *) const = 0;
-		virtual bool IntersectP(const Ray &r) const = 0;
+		virtual bool Intersect(const Ray& r, SurfaceInteraction*) const = 0;
+		virtual bool IntersectP(const Ray& r) const = 0;
 		virtual void ComputeScatteringFunctions() const = 0;
 	};
 
-	class GeometricPrimitive : public Primitive {
+	class GeometricPrimitive : public Primitive
+	{
 	public:
 		virtual Bounds3 WorldBound() const;
-		virtual bool Intersect(const Ray &r, SurfaceInteraction *isect) const;
-		virtual bool IntersectP(const Ray &r) const;
-		GeometricPrimitive(const std::shared_ptr<Shape> &shape);
-		void ComputeScatteringFunctions() const {}
+		virtual bool Intersect(const Ray& r, SurfaceInteraction* isect) const;
+		virtual bool IntersectP(const Ray& r) const;
+		GeometricPrimitive(const std::shared_ptr<Shape>& shape);
+		void ComputeScatteringFunctions() const
+		{
+		}
 
 	private:
 		std::shared_ptr<Shape> shape;
 	};
 
-	class Aggregate : public Primitive {
+	class Aggregate : public Primitive
+	{
 	public:
 		// Aggregate Public Methods
-		void ComputeScatteringFunctions() const {}
+		void ComputeScatteringFunctions() const
+		{
+		}
 
 	};
 

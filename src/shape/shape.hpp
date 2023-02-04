@@ -10,18 +10,18 @@ namespace ZR
 	class Shape
 	{
 	public:
-		const Transform *ObjectToWorld, *WorldToObject;
+		const Transform* ObjectToWorld, * WorldToObject;
 		const bool reverseOrientation;
 
 		// Shape Interface
-		Shape(const Transform *ObjectToWorld, const Transform *WorldToObject, bool reverseOrientation);
+		Shape(const Transform* ObjectToWorld, const Transform* WorldToObject, bool reverseOrientation);
 		virtual ~Shape();
 		virtual Bounds3 ObjectBound() const = 0;
 		virtual Bounds3 WorldBound() const;
-		virtual bool Intersect(const Ray &ray, float *tHit,
-				SurfaceInteraction *isect,
+		virtual bool Intersect(const Ray& ray, float* tHit,
+				SurfaceInteraction* isect,
 				bool testAlphaTexture = true) const = 0;
-		virtual bool IntersectP(const Ray &ray,bool testAlphaTexture = true) const
+		virtual bool IntersectP(const Ray& ray, bool testAlphaTexture = true) const
 		{
 			return Intersect(ray, nullptr, nullptr, testAlphaTexture);
 		}

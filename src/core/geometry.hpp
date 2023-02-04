@@ -1,4 +1,5 @@
 #pragma once
+
 #include <Eigen/Eigen>
 #include "ZRender.hpp"
 
@@ -11,9 +12,13 @@ namespace ZR
 		mutable double tMax;
 		double time;
 
-		Ray() :tMax(ZR::Infinity), time(0.f) {}
-		Ray(const Eigen::Vector3d &_o, const Eigen::Vector3d &_d, float tMax = Infinity, float time = 0.f)
-				: origin(_o), direction(_d), tMax(tMax), time(time) {}
+		Ray() : tMax(ZR::Infinity), time(0.f)
+		{
+		}
+		Ray(const Eigen::Vector3d& _o, const Eigen::Vector3d& _d, float tMax = Infinity, float time = 0.f)
+				: origin(_o), direction(_d), tMax(tMax), time(time)
+		{
+		}
 		Eigen::Vector3d operator()(float t) const
 		{
 			return origin + direction * t;
@@ -35,27 +40,31 @@ namespace ZR
 			pMin = Eigen::Vector3d(maxNum, maxNum, maxNum);
 			pMax = Eigen::Vector3d(minNum, minNum, minNum);
 		}
-		explicit Bounds3(const Eigen::Vector3d &p) : pMin(p), pMax(p) {}
-		Bounds3(const Eigen::Vector3d &p1, const Eigen::Vector3d &p2)
+		explicit Bounds3(const Eigen::Vector3d& p) : pMin(p), pMax(p)
+		{
+		}
+		Bounds3(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2)
 				: pMin(std::min(p1.x(), p2.x()), std::min(p1.y(), p2.y()),
-					std::min(p1.z(), p2.z())),
+				std::min(p1.z(), p2.z())),
 				  pMax(std::max(p1.x(), p2.x()), std::max(p1.y(), p2.y()),
-					std::max(p1.z(), p2.z())) {}
+						  std::max(p1.z(), p2.z()))
+		{
+		}
 
-		bool operator==(const Bounds3 &b) const
+		bool operator==(const Bounds3& b) const
 		{
 			return b.pMin == pMin && b.pMax == pMax;
 		}
-		bool operator!=(const Bounds3 &b) const
+		bool operator!=(const Bounds3& b) const
 		{
 			return b.pMin != pMin || b.pMax != pMax;
 		}
-		const Eigen::Vector3d &operator[](int i) const
+		const Eigen::Vector3d& operator[](int i) const
 		{
 			//DCHECK(i == 0 || i == 1);
 			return (i == 0) ? pMin : pMax;
 		}
-		Eigen::Vector3d &operator[](int i)
+		Eigen::Vector3d& operator[](int i)
 		{
 			//DCHECK(i == 0 || i == 1);
 			return (i == 0) ? pMin : pMax;
@@ -67,7 +76,10 @@ namespace ZR
 					(*this)[(corner & 2) ? 1 : 0].y(),
 					(*this)[(corner & 4) ? 1 : 0].z());
 		}
-		Eigen::Vector3d Diagonal() const { return pMax - pMin; }
+		Eigen::Vector3d Diagonal() const
+		{
+			return pMax - pMin;
+		}
 		double SurfaceArea() const
 		{
 			Eigen::Vector3d d = Diagonal();
@@ -88,7 +100,7 @@ namespace ZR
 			else
 				return 2;
 		}
-		Eigen::Vector3d Offset(const Eigen::Vector3d &p) const
+		Eigen::Vector3d Offset(const Eigen::Vector3d& p) const
 		{
 			Eigen::Vector3d o = p - pMin;
 			if (pMax.x() > pMin.x()) o.x() /= pMax.x() - pMin.x();
@@ -96,7 +108,15 @@ namespace ZR
 			if (pMax.z() > pMin.z()) o.z() /= pMax.z() - pMin.z();
 			return o;
 		}
-		inline bool IntersectP(const Ray &ray, float *hitt0 = nullptr,float *hitt1 = nullptr) const;
-		inline bool IntersectP(const Ray &ray, const Eigen::Vector3d &invDir,const int dirIsNeg[3]) const;
+		inline bool IntersectP(const Ray& ray, float* hitt0 = nullptr, float* hitt1 = nullptr) const;
+		inline bool IntersectP(const Ray& ray, const Eigen::Vector3d& invDir, const int dirIsNeg[3]) const;
 	};
+
+	Bounds3 Union(const Bounds3& b, const Eigen::Vector3d& p)
+	{
+		Bounds3 ret;
+		ret.pMin = min(b.pMin, p);
+		ret.pMax = max(b.pMax, p);
+		return ret;
+	}
 }
