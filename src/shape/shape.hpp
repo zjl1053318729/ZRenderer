@@ -2,11 +2,12 @@
 
 #include <Eigen/Eigen>
 #include "../core/geometry.hpp"
-#include "../core/intersection.hpp"
 #include "../core/transform.hpp"
 
 namespace ZR
 {
+	static long long nShapesCreated = 0;
+
 	class Shape
 	{
 	public:
@@ -14,7 +15,11 @@ namespace ZR
 		const bool reverseOrientation;
 
 		// Shape Interface
-		Shape(const Transform* ObjectToWorld, const Transform* WorldToObject, bool reverseOrientation);
+		Shape(const Transform* ObjectToWorld, const Transform* WorldToObject, bool reverseOrientation) :
+				ObjectToWorld(ObjectToWorld), WorldToObject(WorldToObject), reverseOrientation(reverseOrientation)
+		{
+			++nShapesCreated;
+		};
 		virtual ~Shape();
 		virtual Bounds3 ObjectBound() const = 0;
 		virtual Bounds3 WorldBound() const;
@@ -27,4 +32,9 @@ namespace ZR
 		}
 		virtual double Area() const = 0;
 	};
+
+	Bounds3 Shape::WorldBound() const
+	{
+		return (*ObjectToWorld)(ObjectBound());
+	}
 }

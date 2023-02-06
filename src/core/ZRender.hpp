@@ -2,6 +2,8 @@
 
 #include <limits>
 #include <Eigen/Eigen>
+#include <pcg_random.hpp>
+#include <random>
 
 namespace ZR
 {
@@ -12,7 +14,7 @@ namespace ZR
 	static constexpr double PiOver2 = 1.57079632679489661923;
 	static constexpr double PiOver4 = 0.78539816339744830961;
 	static constexpr double Sqrt2 = 1.41421356237309504880;
-	inline constexpr double Radians(float deg)
+	inline constexpr double Radians(double deg)
 	{
 		return (Pi / 180) * deg;
 	}
@@ -33,4 +35,42 @@ namespace ZR
 		z = std::max(_a.z(), _b.z());
 		return Eigen::Vector3d(x, y, z);
 	}
+	inline double random_double(double _l = 0.0, double _r = 1.0)
+	{
+		// Seed with a real random value, if available
+		static pcg_extras::seed_seq_from<std::random_device> seed_source;
+
+		// Make a random number engine
+		static pcg32 rng(seed_source);
+
+		std::uniform_real_distribution<> uniform_dist(_l, _r);
+		return uniform_dist(rng);
+	}
+	inline int random_int(int _l = 0, int _r = 1)
+	{
+		// Seed with a real random value, if available
+		static pcg_extras::seed_seq_from<std::random_device> seed_source;
+
+		// Make a random number engine
+		static pcg32 rng(seed_source);
+
+		std::uniform_int_distribution<> uniform_dist(_l, _r);
+		return uniform_dist(rng);
+	}
+
+	class Transform;
+
+	class Ray;
+
+	class Shape;
+
+	struct Interaction;
+
+	class SurfaceInteraction;
+
+	class Primitive;
+
+	class GeometricPrimitive;
+
+	class Aggregate;
 }

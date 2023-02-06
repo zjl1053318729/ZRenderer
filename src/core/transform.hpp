@@ -121,4 +121,125 @@ namespace ZR
 					 m(0, 2) * (m(1, 0) * m(2, 1) - m(1, 1) * m(2, 0));
 		return det < 0;
 	}
+	Transform Transform::operator*(const Transform& t2) const
+	{
+		return Transform(m * t2.m, t2.mInv * mInv);
+	}
+	Transform Translate(const Eigen::Vector3d& delta)
+	{
+		Eigen::Matrix4d m;
+		m << 1, 0, 0, delta.x(),
+				0, 1, 0, delta.y(),
+				0, 0, 1, delta.z(),
+				0, 0, 0, 1;
+		Eigen::Matrix4d minv;
+		minv << 1, 0, 0, -delta.x(),
+				0, 1, 0, -delta.y(),
+				0, 0, 1, -delta.z(),
+				0, 0, 0, 1;
+		return Transform(m, minv);
+	}
+	Transform Scale(float x, float y, float z)
+	{
+		Eigen::Matrix4d m;
+		m << x, 0, 0, 0,
+				0, y, 0, 0,
+				0, 0, z, 0,
+				0, 0, 0, 1;
+		Eigen::Matrix4d minv;
+		minv << 1 / x, 0, 0, 0,
+				0, 1 / y, 0, 0,
+				0, 0, 1 / z, 0,
+				0, 0, 0, 1;
+		return Transform(m, minv);
+	}
+	Transform RotateX(float theta)
+	{
+		float sinTheta = std::sin(Radians(theta));
+		float cosTheta = std::cos(Radians(theta));
+		Eigen::Matrix4d m;
+		m << 1, 0, 0, 0,
+				0, cosTheta, -sinTheta, 0,
+				0, sinTheta, cosTheta, 0,
+				0, 0, 0, 1;
+		return Transform(m, m.transpose());
+	}
+	Transform RotateY(float theta)
+	{
+		float sinTheta = std::sin(Radians(theta));
+		float cosTheta = std::cos(Radians(theta));
+		Eigen::Matrix4d m;
+		m << cosTheta, 0, sinTheta, 0,
+				0, 1, 0, 0,
+				-sinTheta, 0, cosTheta, 0,
+				0, 0, 0, 1;
+		return Transform(m, m.transpose());
+	}
+	Transform RotateZ(float theta)
+	{
+		float sinTheta = std::sin(Radians(theta));
+		float cosTheta = std::cos(Radians(theta));
+		Eigen::Matrix4d m;
+		m << cosTheta, -sinTheta, 0, 0,
+				sinTheta, cosTheta, 0, 0,
+				0, 0, 1, 0,
+				0, 0, 0, 1;
+		return Transform(m, m.transpose());
+	}
+	Transform Rotate(float theta, const Eigen::Vector3d& axis)
+	{
+		Eigen::Vector3d a = axis.normalized();
+		float sinTheta = std::sin(Radians(theta));
+		float cosTheta = std::cos(Radians(theta));
+		Eigen::Matrix4d m;
+		// Compute rotation of first basis vector
+		m(0, 0) = a.x() * a.x() + (1 - a.x() * a.x()) * cosTheta;
+		m(0, 1) = a.x() * a.y() * (1 - cosTheta) - a.z() * sinTheta;
+		m(0, 2) = a.x() * a.z() * (1 - cosTheta) + a.y() * sinTheta;
+		m(0, 3) = 0;
+
+		// Compute rotations of second and third basis vectors
+		m(1, 0) = a.x() * a.y() * (1 - cosTheta) + a.z() * sinTheta;
+		m(1, 1) = a.y() * a.y() + (1 - a.y() * a.y()) * cosTheta;
+		m(1, 2) = a.y() * a.z() * (1 - cosTheta) - a.x() * sinTheta;
+		m(1, 3) = 0;
+
+		m(2, 0) = a.x() * a.z() * (1 - cosTheta) - a.y() * sinTheta;
+		m(2, 1) = a.y() * a.z() * (1 - cosTheta) + a.x() * sinTheta;
+		m(2, 2) = a.z() * a.z() + (1 - a.z() * a.z()) * cosTheta;
+		m(2, 3) = 0;
+		return Transform(m, m.transpose());
+	}
+	Transform LookAt(const Eigen::Vector3d& pos, const Eigen::Vector3d& look, const Eigen::Vector3d& up)
+	{
+		Eigen::Matrix4d cameraToWorld;
+		// Initialize fourth column of viewing matrix
+		cameraToWorld(0, 3) = pos.x();
+		cameraToWorld(1, 3) = pos.y();
+		cameraToWorld(2, 3) = pos.z();
+		cameraToWorld(3, 3) = 1;
+
+		// Initialize first three columns of viewing matrix
+		Eigen::Vector3d dir = (look - pos).normalized();
+		if (up.normalized().cross(dir).norm() == 0)
+		{
+			//wrong
+			return Transform();
+		}
+		Eigen::Vector3d right = up.normalized().cross(dir).normalized();
+		Eigen::Vector3d newUp = dir.cross(right);
+		cameraToWorld(0, 0) = right.x();
+		cameraToWorld(1, 0) = right.y();
+		cameraToWorld(2, 0) = right.z();
+		cameraToWorld(3, 0) = 0.;
+		cameraToWorld(0, 1) = newUp.x();
+		cameraToWorld(1, 1) = newUp.y();
+		cameraToWorld(2, 1) = newUp.z();
+		cameraToWorld(3, 1) = 0.;
+		cameraToWorld(0, 2) = dir.x();
+		cameraToWorld(1, 2) = dir.y();
+		cameraToWorld(2, 2) = dir.z();
+		cameraToWorld(3, 2) = 0.;
+		return Transform(cameraToWorld.inverse(), cameraToWorld);
+	}
 }

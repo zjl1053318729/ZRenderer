@@ -2,9 +2,11 @@
 
 #include <Eigen/Eigen>
 #include <memory>
+#include "../shape/shape.hpp"
 #include "ZRender.hpp"
 #include "geometry.hpp"
 #include "intersection.hpp"
+
 
 namespace ZR
 {
