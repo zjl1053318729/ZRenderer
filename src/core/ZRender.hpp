@@ -14,6 +14,7 @@ namespace ZR
 	static constexpr double PiOver2 = 1.57079632679489661923;
 	static constexpr double PiOver4 = 0.78539816339744830961;
 	static constexpr double Sqrt2 = 1.41421356237309504880;
+	static constexpr double MachineEpsilon = 1e-6;
 	inline constexpr double Radians(double deg)
 	{
 		return (Pi / 180) * deg;
@@ -56,6 +57,9 @@ namespace ZR
 
 		std::uniform_int_distribution<> uniform_dist(_l, _r);
 		return uniform_dist(rng);
+	}
+	inline constexpr double gamma(int n) {
+		return (n * MachineEpsilon) / (1 - n * MachineEpsilon);
 	}
 
 	class Transform;
