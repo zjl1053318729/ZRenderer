@@ -32,7 +32,7 @@ int main()
 
 	tri_Object2World = ZR::Translate(Eigen::Vector3d(0.0, -2.5, 0.0)) * tri_Object2World;
 	tri_World2Object = Inverse(tri_Object2World);
-	plyi = new ZR::plyInfo("Resources/dragon.3d");
+	plyi = new ZR::plyInfo("dragon.3d");
 	mesh = std::make_shared<ZR::TriangleMesh>(tri_Object2World, plyi->nTriangles, plyi->vertexIndices, plyi->nVertices,
 			plyi->vertexArray, nullptr, nullptr, nullptr, nullptr);
 	tris.reserve(plyi->nTriangles);

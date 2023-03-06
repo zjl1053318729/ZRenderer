@@ -328,14 +328,16 @@ namespace ZR
 	}
 	int BVHAccel::flattenBVHTree(BVHBuildNode* node, int* offset)
 	{
-		LinearBVHNode *linearNode = &nodes[*offset];
+		LinearBVHNode* linearNode = &nodes[*offset];
 		linearNode->bounds = node->bounds;
 		int myOffset = (*offset)++;
-		if (node->nPrimitives > 0) {
+		if (node->nPrimitives > 0)
+		{
 			linearNode->primitivesOffset = node->firstPrimOffset;
 			linearNode->nPrimitives = node->nPrimitives;
 		}
-		else {
+		else
+		{
 			// Create interior flattened BVH node
 			linearNode->axis = node->splitAxis;
 			linearNode->nPrimitives = 0;
@@ -363,12 +365,15 @@ namespace ZR
 		// Follow ray through BVH nodes to find primitive intersections
 		int toVisitOffset = 0, currentNodeIndex = 0;
 		int nodesToVisit[64];
-		while (true) {
+		while (true)
+		{
 
-			const LinearBVHNode *node = &nodes[currentNodeIndex];
+			const LinearBVHNode* node = &nodes[currentNodeIndex];
 			// Check ray against BVH node
-			if (node->bounds.IntersectP(ray, invDir, dirIsNeg)) {
-				if (node->nPrimitives > 0) {
+			if (node->bounds.IntersectP(ray, invDir, dirIsNeg))
+			{
+				if (node->nPrimitives > 0)
+				{
 
 					// Intersect ray with primitives in leaf BVH node
 					for (int i = 0; i < node->nPrimitives; ++i)
@@ -377,20 +382,24 @@ namespace ZR
 					if (toVisitOffset == 0) break;
 					currentNodeIndex = nodesToVisit[--toVisitOffset];
 				}
-				else {
+				else
+				{
 					// Put far BVH node on _nodesToVisit_ stack, advance to near
 					// node
-					if (dirIsNeg[node->axis]) {
+					if (dirIsNeg[node->axis])
+					{
 						nodesToVisit[toVisitOffset++] = currentNodeIndex + 1;
 						currentNodeIndex = node->secondChildOffset;
 					}
-					else {
+					else
+					{
 						nodesToVisit[toVisitOffset++] = node->secondChildOffset;
 						currentNodeIndex = currentNodeIndex + 1;
 					}
 				}
 			}
-			else {
+			else
+			{
 				if (toVisitOffset == 0) break;
 				currentNodeIndex = nodesToVisit[--toVisitOffset];
 			}
@@ -404,33 +413,42 @@ namespace ZR
 		int dirIsNeg[3] = { invDir.x() < 0, invDir.y() < 0, invDir.z() < 0 };
 		int nodesToVisit[64];
 		int toVisitOffset = 0, currentNodeIndex = 0;
-		while (true) {
-			const LinearBVHNode *node = &nodes[currentNodeIndex];
-			if (node->bounds.IntersectP(ray, invDir, dirIsNeg)) {
+		while (true)
+		{
+			const LinearBVHNode* node = &nodes[currentNodeIndex];
+			if (node->bounds.IntersectP(ray, invDir, dirIsNeg))
+			{
 				// Process BVH node _node_ for traversal
-				if (node->nPrimitives > 0) {
-					for (int i = 0; i < node->nPrimitives; ++i) {
+				if (node->nPrimitives > 0)
+				{
+					for (int i = 0; i < node->nPrimitives; ++i)
+					{
 						if (primitives[node->primitivesOffset + i]->IntersectP(
-								ray)) {
+								ray))
+						{
 							return true;
 						}
 					}
 					if (toVisitOffset == 0) break;
 					currentNodeIndex = nodesToVisit[--toVisitOffset];
 				}
-				else {
-					if (dirIsNeg[node->axis]) {
+				else
+				{
+					if (dirIsNeg[node->axis])
+					{
 						/// second child first
 						nodesToVisit[toVisitOffset++] = currentNodeIndex + 1;
 						currentNodeIndex = node->secondChildOffset;
 					}
-					else {
+					else
+					{
 						nodesToVisit[toVisitOffset++] = node->secondChildOffset;
 						currentNodeIndex = currentNodeIndex + 1;
 					}
 				}
 			}
-			else {
+			else
+			{
 				if (toVisitOffset == 0) break;
 				currentNodeIndex = nodesToVisit[--toVisitOffset];
 			}

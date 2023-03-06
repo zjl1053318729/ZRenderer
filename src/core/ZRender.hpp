@@ -58,8 +58,21 @@ namespace ZR
 		std::uniform_int_distribution<> uniform_dist(_l, _r);
 		return uniform_dist(rng);
 	}
-	inline constexpr double gamma(int n) {
+	inline constexpr double gamma(int n)
+	{
 		return (n * MachineEpsilon) / (1 - n * MachineEpsilon);
+	}
+	Eigen::Vector3d abs(const Eigen::Vector3d& v)
+	{
+		return Eigen::Vector3d(fabs(v.x()), fabs(v.y()), fabs(v.z()));
+	}
+	int MaxDimension(Eigen::Vector3d v)
+	{
+		return (v.x() > v.y()) ? ((v.x() > v.z()) ? 0 : 2) : ((v.y() > v.z()) ? 1 : 2);
+	}
+	Eigen::Vector3d Permute(const Eigen::Vector3d& v, int x, int y, int z)
+	{
+		return Eigen::Vector3d(v[x], v[y], v[z]);
 	}
 
 	class Transform;

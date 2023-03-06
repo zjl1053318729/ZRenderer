@@ -37,4 +37,8 @@ namespace ZR
 	{
 		return (*ObjectToWorld)(ObjectBound());
 	}
+	Shape::~Shape()
+	{
+
+	}
 }

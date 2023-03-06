@@ -118,7 +118,8 @@ namespace ZR
 	bool Bounds3::IntersectP(const Ray& ray, double* hitt0, double* hitt1) const
 	{
 		double t0 = 0, t1 = ray.tMax;
-		for (int i = 0; i < 3; ++i) {
+		for (int i = 0; i < 3; ++i)
+		{
 			// Update interval for _i_th bounding box slab
 			double invRayDir = 1 / ray.direction[i];
 			double tNear = (pMin[i] - ray.origin[i]) * invRayDir;
@@ -138,7 +139,7 @@ namespace ZR
 	}
 	bool Bounds3::IntersectP(const Ray& ray, const Eigen::Vector3d& invDir, const int* dirIsNeg) const
 	{
-		const Bounds3 &bounds = *this;
+		const Bounds3& bounds = *this;
 		// Check for ray intersection against $x$ and $y$ slabs
 		double tMin = (bounds[dirIsNeg[0]].x() - ray.origin.x()) * invDir.x();
 		double tMax = (bounds[1 - dirIsNeg[0]].x() - ray.origin.x()) * invDir.x();

@@ -11,6 +11,7 @@
 namespace ZR
 {
 	static long long primitiveMemory = 0;
+
 	class Primitive
 	{
 	public:
@@ -41,7 +42,7 @@ namespace ZR
 		std::shared_ptr<Shape> shape;
 	};
 
-	GeometricPrimitive::GeometricPrimitive(const std::shared_ptr<Shape>& shape): shape(shape)
+	GeometricPrimitive::GeometricPrimitive(const std::shared_ptr<Shape>& shape) : shape(shape)
 	{
 		primitiveMemory += sizeof(*this);
 	}
