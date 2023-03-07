@@ -15,7 +15,7 @@ namespace ZR
 				  radius(radius)
 		{
 		}
-		Bounds3 ObjectBound() const;
+		Bounds3 ObjectBound() const override;
 		bool Intersect(const Ray& ray, double* tHit, SurfaceInteraction* isect,
 				bool testAlphaTexture) const;
 		bool IntersectP(const Ray& ray, bool testAlphaTexture) const;
@@ -43,5 +43,14 @@ namespace ZR
 	bool Sphere::IntersectP(const Ray& r, bool testAlphaTexture) const
 	{
 		return false;
+	}
+	Bounds3 Sphere::ObjectBound() const
+	{
+		return Bounds3(Eigen::Vector3d(-radius, -radius, -radius),
+				Eigen::Vector3d(radius, radius, radius));
+	}
+	double Sphere::Area() const
+	{
+		return 4.0 * Pi * radius * radius;
 	}
 }

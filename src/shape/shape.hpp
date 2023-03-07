@@ -23,7 +23,7 @@ namespace ZR
 		virtual ~Shape();
 		virtual Bounds3 ObjectBound() const = 0;
 		virtual Bounds3 WorldBound() const;
-		virtual bool Intersect(const Ray& ray, float* tHit,
+		virtual bool Intersect(const Ray& ray, double * tHit,
 				SurfaceInteraction* isect,
 				bool testAlphaTexture = true) const = 0;
 		virtual bool IntersectP(const Ray& ray, bool testAlphaTexture = true) const

@@ -78,7 +78,7 @@ namespace ZR
 		}
 		Bounds3 ObjectBound() const override;
 		Bounds3 WorldBound() const override;
-		bool Intersect(const Ray& ray, float* tHit, SurfaceInteraction* isect,
+		bool Intersect(const Ray& ray, double* tHit, SurfaceInteraction* isect,
 				bool testAlphaTexture = true) const override;
 		bool IntersectP(const Ray& ray, bool testAlphaTexture = true) const override;
 		double Area() const override;
@@ -122,7 +122,7 @@ namespace ZR
 		const Eigen::Vector3d& p2 = mesh->p[v[2]];
 		return Union(Bounds3(p0, p1), p2);
 	}
-	bool Triangle::Intersect(const Ray& ray, float* tHit, SurfaceInteraction* isect, bool testAlphaTexture) const
+	bool Triangle::Intersect(const Ray& ray, double* tHit, SurfaceInteraction* isect, bool testAlphaTexture) const
 	{
 		++nTests;
 		// Get triangle vertices in _p0_, _p1_, and _p2_

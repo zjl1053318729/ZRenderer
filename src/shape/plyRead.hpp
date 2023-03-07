@@ -22,7 +22,8 @@ namespace ZR
 				else if (ed == "face") f >> nTriangles;
 			}
 
-			vertexArray = new Eigen::Vector3d[nVertices];
+			vertexArray = (Eigen::Vector3d*)malloc(sizeof(Eigen::Vector3d) * nVertices);
+			//vertexArray = new Eigen::Vector3d[nVertices];
 			vertexIndices = new int[3 * nTriangles];
 
 			for (int i = 0; i < nVertices; i++)

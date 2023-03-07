@@ -118,7 +118,7 @@ namespace ZR
 		Bounds3 WorldBound() const override;
 		~BVHAccel() override;
 		bool Intersect(const Ray& ray, SurfaceInteraction* isect) const override;
-		bool IntersectP(const Ray& ray) const;
+		bool IntersectP(const Ray& ray) const override;
 
 	private:
 		// BVHAccel Private Methods

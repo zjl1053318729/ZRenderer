@@ -52,7 +52,7 @@ namespace ZR
 	}
 	bool GeometricPrimitive::Intersect(const Ray& r, SurfaceInteraction* isect) const
 	{
-		float tHit;
+		double tHit;
 		if (!shape->Intersect(r, &tHit, isect)) return false;
 		r.tMax = tHit;
 		// Initialize _SurfaceInteraction::mediumInterface_ after _Shape_
