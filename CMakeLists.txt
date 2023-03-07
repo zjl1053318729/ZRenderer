@@ -18,13 +18,13 @@ add_executable(
         src/accelerator/BVHAccel.hpp
         src/core/geometry.hpp
         src/core/ZRender.hpp
-        src/core/intersection.hpp
+        src/core/interaction.hpp
         src/core/primitive.hpp
         src/shape/shape.hpp
         src/core/transform.hpp
         src/shape/sphere.hpp
         src/shape/triangle.hpp
-        src/shape/plyRead.hpp)
+        src/shape/plyRead.hpp src/core/Spectrum.hpp)
 
 target_include_directories(ZRenderer PRIVATE ${STB_INCLUDE_DIRS})
 target_link_libraries(ZRenderer PRIVATE

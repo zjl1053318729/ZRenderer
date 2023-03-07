@@ -74,6 +74,12 @@ namespace ZR
 	{
 		return Eigen::Vector3d(v[x], v[y], v[z]);
 	}
+	double Clamp(double val, double low, double high)
+	{
+		if (val < low) return low;
+		if (val > high) return high;
+		return val;
+	}
 
 	class Transform;
 
@@ -90,4 +96,11 @@ namespace ZR
 	class GeometricPrimitive;
 
 	class Aggregate;
+
+	template<int nSpectrumSamples>
+	class CoefficientSpectrum;
+
+	class RGBSpectrum;
+
+	typedef RGBSpectrum Spectrum;
 }

@@ -5,16 +5,18 @@
 #include "../accelerator/BVHAccel.hpp"
 #include "../shape/sphere.hpp"
 #include "../core/transform.hpp"
+#include "../core/Spectrum.hpp"
 
+
+const int WIDTH = 500, HEIGHT = 500;
 ZR::Transform sphereT_Object2World, sphereT_World2Object;
 ZR::Shape* s = new ZR::Sphere(&sphereT_Object2World, &sphereT_World2Object, false, 1.0);
+
+ZR::Spectrum buffer[WIDTH + 1][HEIGHT + 1];
 
 int main()
 {
 	freopen("result.ppm", "w", stdout);
-
-	int WIDTH = 500;
-	int HEIGHT = 500;
 
 	std::cout << "P3\n";
 	std::cout << WIDTH << " " << HEIGHT << "\n";
@@ -59,9 +61,10 @@ int main()
 //	ZR::SurfaceInteraction isect1;
 //	s->Intersect(ZR::Ray(origin, Eigen::Vector3d(0,0,1)), &T, &isect1);
 
+	Eigen::Vector3d Light(1.0, 1.0, 1.0);
+	Light.normalize();
 
-
-	for (int i = HEIGHT-1; i >= 0; i--)
+	for (int i = HEIGHT - 1; i >= 0; i--)
 	{
 		for (int j = 0; j < WIDTH; j++)
 		{
@@ -72,21 +75,33 @@ int main()
 
 			ZR::Ray r(origin, (lower_left_corner + v * horizontal + u * vertical) - Eigen::Vector3d(origin));
 			ZR::SurfaceInteraction isect;
-			Eigen::Vector3d colObj(1.0, 1.0, 0.0);
+			ZR::Spectrum colObj(0);
 			double tHit;
 			if (agg->Intersect(r, &isect))
 			{
 				//colObj = Eigen::Vector3d(1.0, 0.0, 0.0);
-				std::cout << "255 0 0 ";
+				double Li = fabs(Light.dot(isect.normal));
+				colObj[1] = Li;
+				//std::cout << "255 0 0 ";
 				//std::cerr<<"hello?\n";
 			}
-			else
-			{
-				std::cout << "255 255 0 ";
-			}
+			buffer[HEIGHT - i - 1][j] = colObj;
 			//std::cerr << i << "  " << j << "\n";
+		}
+		//std::cout << "\n";
+	}
+	int r, g, b;
+	for (int i = 0; i < HEIGHT; i++)
+	{
+		for (int j = 0; j < WIDTH; j++)
+		{
+			r = 255.0 * buffer[i][j][0];
+			g = 255.0 * buffer[i][j][1];
+			b = 255.0 * buffer[i][j][2];
+			std::cout << r << " " << g << " " << b << " ";
 		}
 		std::cout << "\n";
 	}
+
 	return 0;
 }

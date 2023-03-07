@@ -5,7 +5,7 @@
 #include "../shape/shape.hpp"
 #include "ZRender.hpp"
 #include "geometry.hpp"
-#include "intersection.hpp"
+#include "interaction.hpp"
 
 
 namespace ZR

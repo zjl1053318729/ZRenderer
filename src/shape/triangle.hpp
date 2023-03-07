@@ -3,6 +3,7 @@
 #include <memory>
 #include "../core/transform.hpp"
 #include "shape.hpp"
+#include "../core/interaction.hpp"
 
 namespace ZR
 {
@@ -205,6 +206,7 @@ namespace ZR
 
 		*tHit = t;
 		++nHits;
+		isect->normal = Eigen::Vector3d(((p1 - p0).cross(p2 - p0)).normalized());
 		return true;
 	}
 	bool Triangle::IntersectP(const Ray& ray, bool testAlphaTexture) const
