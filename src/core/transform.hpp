@@ -236,15 +236,28 @@ namespace ZR
 		cameraToWorld(0, 0) = right.x();
 		cameraToWorld(1, 0) = right.y();
 		cameraToWorld(2, 0) = right.z();
-		cameraToWorld(3, 0) = 0.;
+		cameraToWorld(3, 0) = 0;
 		cameraToWorld(0, 1) = newUp.x();
 		cameraToWorld(1, 1) = newUp.y();
 		cameraToWorld(2, 1) = newUp.z();
-		cameraToWorld(3, 1) = 0.;
+		cameraToWorld(3, 1) = 0;
 		cameraToWorld(0, 2) = dir.x();
 		cameraToWorld(1, 2) = dir.y();
 		cameraToWorld(2, 2) = dir.z();
-		cameraToWorld(3, 2) = 0.;
+		cameraToWorld(3, 2) = 0;
 		return Transform(cameraToWorld.inverse(), cameraToWorld);
+	}
+	Transform Perspective(float fov, float n, float f)
+	{
+		// Perform projective divide for perspective projection
+		Eigen::Matrix4d persp;
+		persp << 1, 0, 0, 0,
+				0, 1, 0, 0,
+				0, 0, f / (f - n), -f * n / (f - n),
+				0, 0, 1, 0;
+
+		// Scale canonical perspective view to specified field of view
+		float invTanAng = 1 / std::tan(Radians(fov) / 2);
+		return Scale(invTanAng, invTanAng, 1) * Transform(persp);
 	}
 }

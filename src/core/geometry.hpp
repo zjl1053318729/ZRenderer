@@ -32,6 +32,94 @@ namespace ZR
 		}
 	};
 
+	class Bounds2
+	{
+	public:
+		// Bounds2 Public Data
+		Eigen::Vector2d pMin, pMax;
+
+		// Bounds2 Public Methods
+		Bounds2()
+		{
+			double minNum = std::numeric_limits<double>::lowest();
+			double maxNum = std::numeric_limits<double>::max();
+			pMin = Eigen::Vector2d(maxNum, maxNum);
+			pMax = Eigen::Vector2d(minNum, minNum);
+		}
+		explicit Bounds2(const Eigen::Vector2d& p) : pMin(p), pMax(p)
+		{
+		}
+		Bounds2(const Eigen::Vector2d& p1, const Eigen::Vector2d& p2)
+		{
+			pMin = Eigen::Vector2d(std::min(p1.x(), p2.x()), std::min(p1.y(), p2.y()));
+			pMax = Eigen::Vector2d(std::max(p1.x(), p2.x()), std::max(p1.y(), p2.y()));
+		}
+
+		Eigen::Vector2d Diagonal() const
+		{
+			return pMax - pMin;
+		}
+		double Area() const
+		{
+			Eigen::Vector2d d = pMax - pMin;
+			return (d.x() * d.y());
+		}
+		int MaximumExtent() const
+		{
+			Eigen::Vector2d diag = Diagonal();
+			if (diag.x() > diag.y())
+				return 0;
+			else
+				return 1;
+		}
+		inline const Eigen::Vector2d& operator[](int i) const
+		{
+			return (i == 0) ? pMin : pMax;
+		}
+		inline Eigen::Vector2d& operator[](int i)
+		{
+			return (i == 0) ? pMin : pMax;
+		}
+		bool operator==(const Bounds2& b) const
+		{
+			return b.pMin == pMin && b.pMax == pMax;
+		}
+		bool operator!=(const Bounds2& b) const
+		{
+			return b.pMin != pMin || b.pMax != pMax;
+		}
+		Eigen::Vector2d Lerp(double t, const Eigen::Vector2d& v0, const Eigen::Vector2d& v1)
+		{
+			return (1 - t) * v0 + t * v1;
+		}
+		Eigen::Vector2d Lerp(const Eigen::Vector2d& t) const
+		{
+			return Eigen::Vector2d(ZR::Lerp(t.x(), pMin.x(), pMax.x()),
+					ZR::Lerp(t.y(), pMin.y(), pMax.y()));
+		}
+		Eigen::Vector2d Offset(const Eigen::Vector2d& p) const
+		{
+			Eigen::Vector2d o = p - pMin;
+			if (pMax.x() > pMin.x()) o.x() /= pMax.x() - pMin.x();
+			if (pMax.y() > pMin.y()) o.y() /= pMax.y() - pMin.y();
+			return o;
+		}
+		bool Inside(const Eigen::Vector2d& pt, const Bounds2& b) const
+		{
+			return (pt.x() >= b.pMin.x() && pt.x() <= b.pMax.x() && pt.y() >= b.pMin.y() &&
+					pt.y() <= b.pMax.y());
+		}
+		inline double Distance(const Eigen::Vector2d& p1, const Eigen::Vector2d& p2) const
+		{
+			return (p1 - p2).norm();
+		}
+		void BoundingSphere(Eigen::Vector2d* c, double* rad) const
+		{
+			*c = (pMin + pMax) / 2;
+			*rad = Inside(*c, *this) ? Distance(*c, pMax) : 0;
+		}
+	};
+
 	class Bounds3
 	{
 	public:

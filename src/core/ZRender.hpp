@@ -80,6 +80,10 @@ namespace ZR
 		if (val > high) return high;
 		return val;
 	}
+	double Lerp(double t, double a, double b)
+	{
+		return a + (b - a) * t;
+	}
 
 	class Transform;
 
