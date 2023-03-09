@@ -24,7 +24,7 @@ add_executable(
         src/core/transform.hpp
         src/shape/sphere.hpp
         src/shape/triangle.hpp
-        src/shape/plyRead.hpp src/core/Spectrum.hpp src/core/perspective.hpp src/sampler/sampler.hpp)
+        src/shape/plyRead.hpp src/core/Spectrum.hpp src/core/perspective.hpp src/sampler/sampler.hpp src/core/orthographic.hpp)
 
 target_include_directories(ZRenderer PRIVATE ${STB_INCLUDE_DIRS})
 target_link_libraries(ZRenderer PRIVATE

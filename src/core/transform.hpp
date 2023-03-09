@@ -247,6 +247,10 @@ namespace ZR
 		cameraToWorld(3, 2) = 0;
 		return Transform(cameraToWorld.inverse(), cameraToWorld);
 	}
+	Transform Orthographic(float zNear, float zFar) {
+		return Scale(1, 1, 1 / (zFar - zNear)) * Translate(Eigen::Vector3d(0, 0, -zNear));
+	}
+
 	Transform Perspective(float fov, float n, float f)
 	{
 		// Perform projective divide for perspective projection

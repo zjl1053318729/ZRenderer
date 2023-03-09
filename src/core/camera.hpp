@@ -2,7 +2,6 @@
 
 #include<Eigen/Eigen>
 #include "transform.hpp"
-#include "perspective.hpp"
 
 namespace ZR
 {
@@ -62,5 +61,6 @@ namespace ZR
 	};
 
 	//PerspectiveCamera *CreatePerspectiveCamera(const int RasterWidth, const int RasterHeight, const Transform &cam2world);
+	//OrthographicCamera *CreateOrthographicCamera(const int RasterWidth, const int RasterHeight, const Transform &cam2world);
 
 }
