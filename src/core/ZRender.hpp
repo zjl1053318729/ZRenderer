@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <limits>
 #include <Eigen/Eigen>
 #include <pcg_random.hpp>
@@ -15,11 +16,11 @@ namespace ZR
 	static constexpr double PiOver4 = 0.78539816339744830961;
 	static constexpr double Sqrt2 = 1.41421356237309504880;
 	static constexpr double MachineEpsilon = 1e-6;
+	double Infinity = std::numeric_limits<double>::max();
 	inline constexpr double Radians(double deg)
 	{
 		return (Pi / 180) * deg;
 	}
-	double Infinity = std::numeric_limits<double>::max();
 	inline Eigen::Vector3d min(Eigen::Vector3d _a, Eigen::Vector3d _b)
 	{
 		double x, y, z;
@@ -83,6 +84,11 @@ namespace ZR
 	double Lerp(double t, double a, double b)
 	{
 		return a + (b - a) * t;
+	}
+
+	int Mod(int a, int b)
+	{
+		return ((a % b) + b) % b;
 	}
 
 	class Transform;

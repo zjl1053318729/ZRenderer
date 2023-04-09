@@ -3,6 +3,7 @@
 #include <Eigen/Eigen>
 #include "camera.hpp"
 #include "../sampler/sampler.hpp"
+#include "../sampler/sampling.hpp"
 
 namespace ZR
 {
@@ -57,8 +58,8 @@ namespace ZR
 	PerspectiveCamera*
 	CreatePerspectiveCamera(const int RasterWidth, const int RasterHeight, const Transform& cam2world)
 	{
-		double lensradius = 0.3f;
-		double focaldistance = 3.0f;
+		double lensradius = 0.0001;
+		double focaldistance = 1;
 		double frame = (double)RasterWidth / (double)RasterHeight;
 		Bounds2 screen;
 		if (frame > 1.f)

@@ -9,6 +9,7 @@ namespace ZR
 	{
 		Eigen::Vector2d pFilm;
 		Eigen::Vector2d pLens;
+		double time;
 	};
 
 	class Camera

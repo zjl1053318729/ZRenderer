@@ -101,8 +101,21 @@ namespace ZR
 	Ray Transform::operator()(const Ray& r) const
 	{
 		Eigen::Vector3d o, d;
-		o = (*this)(r.origin);
-		d = (*this)(r.direction);
+		double x, y, z, xp, yp, zp, wp;
+		x = r.origin.x(), y = r.origin.y(), z = r.origin.z();
+		xp = m(0, 0) * x + m(0, 1) * y + m(0, 2) * z + m(0, 3);
+		yp = m(1, 0) * x + m(1, 1) * y + m(1, 2) * z + m(1, 3);
+		zp = m(2, 0) * x + m(2, 1) * y + m(2, 2) * z + m(2, 3);
+		wp = m(3, 0) * x + m(3, 1) * y + m(3, 2) * z + m(3, 3);
+		o << xp, yp, zp;
+		o /= wp;
+
+		x = r.direction.x(), y = r.direction.y(), z = r.direction.z();
+		xp = m(0, 0) * x + m(0, 1) * y + m(0, 2) * z;
+		yp = m(1, 0) * x + m(1, 1) * y + m(1, 2) * z;
+		zp = m(2, 0) * x + m(2, 1) * y + m(2, 2) * z;
+		d << xp, yp, zp;
+		d.normalize();
 		double tMax = r.tMax;
 		return Ray(o, d, tMax, r.time);
 	}
@@ -245,9 +258,11 @@ namespace ZR
 		cameraToWorld(1, 2) = dir.y();
 		cameraToWorld(2, 2) = dir.z();
 		cameraToWorld(3, 2) = 0;
+		//std::cerr<<cameraToWorld<<"\n";
 		return Transform(cameraToWorld.inverse(), cameraToWorld);
 	}
-	Transform Orthographic(float zNear, float zFar) {
+	Transform Orthographic(float zNear, float zFar)
+	{
 		return Scale(1, 1, 1 / (zFar - zNear)) * Translate(Eigen::Vector3d(0, 0, -zNear));
 	}
 

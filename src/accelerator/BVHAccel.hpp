@@ -367,7 +367,6 @@ namespace ZR
 		int nodesToVisit[64];
 		while (true)
 		{
-
 			const LinearBVHNode* node = &nodes[currentNodeIndex];
 			// Check ray against BVH node
 			if (node->bounds.IntersectP(ray, invDir, dirIsNeg))
@@ -404,6 +403,7 @@ namespace ZR
 				currentNodeIndex = nodesToVisit[--toVisitOffset];
 			}
 		}
+		//std::cerr<<hit<<"\n";
 		return hit;
 	}
 	bool BVHAccel::IntersectP(const Ray& ray) const

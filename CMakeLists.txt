@@ -14,7 +14,7 @@ add_executable(
         ZRenderer src/main/main.cpp
         src/core/camera.hpp
         src/core/Parser.hpp
-        src/core/Scene.hpp
+        src/core/scene.hpp
         src/accelerator/BVHAccel.hpp
         src/core/geometry.hpp
         src/core/ZRender.hpp
@@ -24,7 +24,7 @@ add_executable(
         src/core/transform.hpp
         src/shape/sphere.hpp
         src/shape/triangle.hpp
-        src/shape/plyRead.hpp src/core/Spectrum.hpp src/core/perspective.hpp src/sampler/sampler.hpp src/core/orthographic.hpp)
+        src/shape/plyRead.hpp src/core/spectrum.hpp src/core/perspective.hpp src/sampler/sampler.hpp src/core/orthographic.hpp src/sampler/halton.hpp src/sampler/RNG.hpp src/sampler/LowDiscrepancy.hpp src/sampler/sampling.hpp src/Integrator/Integrator.hpp src/core/buffer.hpp src/sampler/clockRand.hpp)
 
 target_include_directories(ZRenderer PRIVATE ${STB_INCLUDE_DIRS})
 target_link_libraries(ZRenderer PRIVATE
