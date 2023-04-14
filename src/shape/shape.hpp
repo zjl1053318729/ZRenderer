@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Eigen/Eigen>
-#include "../core/geometry.hpp"
 #include "../core/transform.hpp"
 
 namespace ZR
@@ -26,19 +25,9 @@ namespace ZR
 		virtual bool Intersect(const Ray& ray, double* tHit,
 				SurfaceInteraction* isect,
 				bool testAlphaTexture = true) const = 0;
-		virtual bool IntersectP(const Ray& ray, bool testAlphaTexture = true) const
-		{
-			return Intersect(ray, nullptr, nullptr, testAlphaTexture);
-		}
+		virtual bool IntersectP(const Ray& ray, bool testAlphaTexture = true) const;
 		virtual double Area() const = 0;
 	};
 
-	Bounds3 Shape::WorldBound() const
-	{
-		return (*ObjectToWorld)(ObjectBound());
-	}
-	Shape::~Shape()
-	{
 
-	}
 }

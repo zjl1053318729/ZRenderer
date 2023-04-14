@@ -1,6 +1,5 @@
 #pragma once
 
-#include<Eigen/Eigen>
 #include "transform.hpp"
 
 namespace ZR
@@ -22,12 +21,8 @@ namespace ZR
 		virtual ~Camera()
 		{
 		}
-		virtual double GenerateRay(const CameraSample& sample, Ray* ray) const
-		{
-			return 1;
-		};
+		virtual double GenerateRay(const CameraSample& sample, Ray* ray) const;
 
-		// Camera Public Data
 		Transform CameraToWorld;
 	};
 
@@ -37,22 +32,7 @@ namespace ZR
 		// ProjectiveCamera Public Methods
 		ProjectiveCamera(const int RasterWidth, const int RasterHeight, const Transform& CameraToWorld,
 				const Transform& CameraToScreen,
-				const Bounds2& screenWindow, double lensr, double focald)
-				: Camera(CameraToWorld),
-				  CameraToScreen(CameraToScreen)
-		{
-			// Initialize depth of field parameters
-			lensRadius = lensr;
-			focalDistance = focald;
-			// Compute projective camera screen transformations
-			ScreenToRaster =
-					Scale(RasterWidth, RasterHeight, 1) *
-					Scale(1 / (screenWindow.pMax.x() - screenWindow.pMin.x()),
-							1 / (screenWindow.pMin.y() - screenWindow.pMax.y()), 1) *
-					Translate(Eigen::Vector3d(-screenWindow.pMin.x(), -screenWindow.pMax.y(), 0));
-			RasterToScreen = Inverse(ScreenToRaster);
-			RasterToCamera = Inverse(CameraToScreen) * RasterToScreen;
-		}
+				const Bounds2& screenWindow, double lensr, double focald);
 
 	protected:
 		// ProjectiveCamera Protected Data
@@ -61,7 +41,9 @@ namespace ZR
 		double lensRadius, focalDistance;
 	};
 
-	//PerspectiveCamera *CreatePerspectiveCamera(const int RasterWidth, const int RasterHeight, const Transform &cam2world);
-	//OrthographicCamera *CreateOrthographicCamera(const int RasterWidth, const int RasterHeight, const Transform &cam2world);
+	Camera*
+	CreatePerspectiveCamera(const int RasterWidth, const int RasterHeight, const Transform& cam2world);
+	OrthographicCamera*
+	CreateOrthographicCamera(const int RasterWidth, const int RasterHeight, const Transform& cam2world);
 
 }

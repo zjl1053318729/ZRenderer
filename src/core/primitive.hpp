@@ -2,10 +2,8 @@
 
 #include <Eigen/Eigen>
 #include <memory>
-#include "../shape/shape.hpp"
-#include "ZRender.hpp"
 #include "geometry.hpp"
-#include "interaction.hpp"
+#include "../material/material.hpp"
 
 
 namespace ZR
@@ -19,56 +17,36 @@ namespace ZR
 		virtual Bounds3 WorldBound() const = 0;
 		virtual bool Intersect(const Ray& r, SurfaceInteraction*) const = 0;
 		virtual bool IntersectP(const Ray& r) const = 0;
-		virtual void ComputeScatteringFunctions() const = 0;
+		virtual void ComputeScatteringFunctions(
+				SurfaceInteraction* isect,
+				TransportMode mode,
+				bool allowMultipleLobes) const = 0;
 	};
-
-	Primitive::~Primitive()
-	{
-
-	}
 
 	class GeometricPrimitive : public Primitive
 	{
 	public:
-		Bounds3 WorldBound() const override;
-		bool Intersect(const Ray& r, SurfaceInteraction* isect) const override;
-		bool IntersectP(const Ray& r) const override;
-		GeometricPrimitive(const std::shared_ptr<Shape>& shape);
-		void ComputeScatteringFunctions() const
-		{
-		}
+		virtual Bounds3 WorldBound() const;
+		virtual bool Intersect(const Ray& r, SurfaceInteraction* isect) const;
+		virtual bool IntersectP(const Ray& r) const override;
+		GeometricPrimitive(const std::shared_ptr<Shape>& shape,
+				const std::shared_ptr<Material>& material);
+		virtual void ComputeScatteringFunctions(SurfaceInteraction* isect,
+				TransportMode mode,
+				bool allowMultipleLobes) const;
 
 	private:
 		std::shared_ptr<Shape> shape;
+		std::shared_ptr<Material> material;
 	};
-
-	GeometricPrimitive::GeometricPrimitive(const std::shared_ptr<Shape>& shape) : shape(shape)
-	{
-		primitiveMemory += sizeof(*this);
-	}
-	Bounds3 GeometricPrimitive::WorldBound() const
-	{
-		return shape->WorldBound();
-	}
-	bool GeometricPrimitive::Intersect(const Ray& r, SurfaceInteraction* isect) const
-	{
-		double tHit;
-		if (!shape->Intersect(r, &tHit, isect)) return false;
-		r.tMax = tHit;
-		// Initialize _SurfaceInteraction::mediumInterface_ after _Shape_
-		// intersection
-		return true;
-	}
-	bool GeometricPrimitive::IntersectP(const Ray& r) const
-	{
-		return shape->IntersectP(r);
-	}
 
 	class Aggregate : public Primitive
 	{
 	public:
 		// Aggregate Public Methods
-		void ComputeScatteringFunctions() const
+		virtual void ComputeScatteringFunctions(SurfaceInteraction* isect,
+				TransportMode mode,
+				bool allowMultipleLobes) const
 		{
 		}
 
