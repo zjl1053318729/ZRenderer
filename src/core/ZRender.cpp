@@ -70,6 +70,54 @@ namespace ZR
 	}
 	double MaxComponent(Eigen::Vector3d _v)
 	{
-		return std::max(_v.x(),std::max(_v.y(),_v.z()));
+		return std::max(_v.x(), std::max(_v.y(), _v.z()));
+	}
+	uint64_t FloatToBits(double f)
+	{
+		uint64_t ui;
+		memcpy(&ui, &f, sizeof(double));
+		return ui;
+	}
+
+	double BitsToFloat(uint64_t ui)
+	{
+		double f;
+		memcpy(&f, &ui, sizeof(uint64_t));
+		return f;
+	}
+	double NextFloatUp(double v)
+	{
+		// Handle infinity and negative zero for _NextFloatUp()_
+		if (std::isinf(v) && v > 0.) return v;
+		if (v == -0.f) v = 0.f;
+
+		// Advance _v_ to next higher double
+		uint64_t ui = FloatToBits(v);
+		if (v >= 0)
+			++ui;
+		else
+			--ui;
+		return BitsToFloat(ui);
+	}
+	double NextFloatDown(double v)
+	{
+		// Handle infinity and positive zero for _NextFloatDown()_
+		if (std::isinf(v) && v < 0.) return v;
+		if (v == 0.f) v = -0.f;
+		uint64_t ui = FloatToBits(v);
+		if (v > 0)
+			--ui;
+		else
+			++ui;
+		return BitsToFloat(ui);
+	}
+	Eigen::Vector3d FaceForward(Eigen::Vector3d a, Eigen::Vector3d b)
+	{
+		if (a.dot(b) < 0.0) return -b;
+		return b;
+	}
+	bool isZero(double x)
+	{
+		return std::fabs(x) < 1e-6;
 	}
 }

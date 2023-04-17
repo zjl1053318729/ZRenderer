@@ -30,7 +30,8 @@ namespace ZR
 		virtual bool Intersect(const Ray& r, SurfaceInteraction* isect) const;
 		virtual bool IntersectP(const Ray& r) const override;
 		GeometricPrimitive(const std::shared_ptr<Shape>& shape,
-				const std::shared_ptr<Material>& material);
+				const std::shared_ptr<Material>& material,
+				const std::shared_ptr<AreaLight>& areaLight);
 		virtual void ComputeScatteringFunctions(SurfaceInteraction* isect,
 				TransportMode mode,
 				bool allowMultipleLobes) const;
@@ -38,6 +39,7 @@ namespace ZR
 	private:
 		std::shared_ptr<Shape> shape;
 		std::shared_ptr<Material> material;
+		std::shared_ptr<AreaLight> areaLight;
 	};
 
 	class Aggregate : public Primitive

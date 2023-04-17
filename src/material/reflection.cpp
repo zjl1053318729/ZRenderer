@@ -276,4 +276,12 @@ namespace ZR
 	{
 		return R;
 	}
+	Spectrum SpecularReflection::Sample_f(const Eigen::Vector3d& wo, Eigen::Vector3d* wi,
+			const Eigen::Vector2d& sample, double* pdf, BxDFType* sampledType) const
+	{
+		// Compute perfect specular reflection direction
+		*wi = Eigen::Vector3d(-wo.x(), -wo.y(), wo.z());
+		*pdf = 1;
+		return fresnel->Evaluate(CosTheta(*wi)) * R / AbsCosTheta(*wi);
+	}
 }

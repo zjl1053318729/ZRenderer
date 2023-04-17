@@ -393,8 +393,7 @@ namespace ZR
 				{
 					for (int i = 0; i < node->nPrimitives; ++i)
 					{
-						if (primitives[node->primitivesOffset + i]->IntersectP(
-								ray))
+						if (primitives[node->primitivesOffset + i]->IntersectP(ray))
 						{
 							return true;
 						}

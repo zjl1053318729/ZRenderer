@@ -34,4 +34,21 @@ namespace ZR
 		if (bsdf)
 			bsdf->~BSDF();
 	}
+	Eigen::Vector3d OffsetRayOrigin(const Eigen::Vector3d& p, const Eigen::Vector3d& pError,
+			const Eigen::Vector3d& n, const Eigen::Vector3d& w)
+	{
+		double d = abs(n).dot(pError);
+		Eigen::Vector3d offset = d * Eigen::Vector3d(n);
+		if (w.dot(n) < 0) offset = -offset;
+		Eigen::Vector3d po = p + offset;
+		// Round offset point _po_ away from _p_
+		for (int i = 0; i < 3; ++i)
+		{
+			if (offset[i] > 0)
+				po[i] = NextFloatUp(po[i]);
+			else if (offset[i] < 0)
+				po[i] = NextFloatDown(po[i]);
+		}
+		return po;
+	}
 }

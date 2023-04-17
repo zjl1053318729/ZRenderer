@@ -4,12 +4,13 @@
 #include "../core/ZRender.hpp"
 #include "../core/interaction.hpp"
 #include "../core/spectrum.hpp"
+#include "Fresnel.hpp"
 
 namespace ZR
 {
 	class SurfaceInteraction;
 
-	// BSDF Inline Functions
+
 	double CosTheta(const Eigen::Vector3d& w);
 	double Cos2Theta(const Eigen::Vector3d& w);
 	double AbsCosTheta(const Eigen::Vector3d& w);
@@ -130,6 +131,37 @@ namespace ZR
 	private:
 		// LambertianReflection Private Data
 		const Spectrum R;
+	};
+
+	class SpecularReflection : public BxDF
+	{
+	public:
+		// SpecularReflection Public Methods
+		SpecularReflection(const Spectrum& R, Fresnel* fresnel)
+				: BxDF(BxDFType(BSDF_REFLECTION | BSDF_SPECULAR)),
+				  R(R),
+				  fresnel(fresnel)
+		{
+		}
+		~SpecularReflection()
+		{
+			fresnel->~Fresnel();
+		}
+		virtual Spectrum f(const Eigen::Vector3d& wo, const Eigen::Vector3d& wi) const
+		{
+			return Spectrum(0.f);
+		}
+		virtual Spectrum Sample_f(const Eigen::Vector3d& wo, Eigen::Vector3d* wi, const Eigen::Vector2d& sample,
+				double* pdf, BxDFType* sampledType) const;
+		double Pdf(const Eigen::Vector3d& wo, const Eigen::Vector3d& wi) const
+		{
+			return 0;
+		}
+
+	private:
+		// SpecularReflection Private Data
+		const Spectrum R;
+		const Fresnel* fresnel;
 	};
 
 }

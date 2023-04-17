@@ -12,8 +12,8 @@ namespace ZR
 	{
 	public:
 		// Scene Public Methods
-		Scene(Aggregate* aggregate)
-				: aggregate(aggregate)
+		Scene(Aggregate* aggregate, const std::vector<std::shared_ptr<Light>>& lights)
+				: aggregate(aggregate), lights(lights)
 		{
 			// Scene Constructor Implementation
 			worldBound = aggregate->WorldBound();
@@ -22,6 +22,7 @@ namespace ZR
 		bool Intersect(const Ray& ray, SurfaceInteraction* isect) const;
 		bool IntersectP(const Ray& ray) const;
 
+		std::vector<std::shared_ptr<Light>> lights;
 	private:
 		// Scene Private Data
 		std::shared_ptr<Primitive> aggregate;

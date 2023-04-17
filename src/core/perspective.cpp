@@ -44,8 +44,8 @@ namespace ZR
 	Camera*
 	CreatePerspectiveCamera(const int RasterWidth, const int RasterHeight, const Transform& cam2world)
 	{
-		double lensradius = 0.0001;
-		double focaldistance = 1;
+		double lensradius = 0.02;
+		double focaldistance = 3;
 		double frame = (double)RasterWidth / (double)RasterHeight;
 		Bounds2 screen;
 		if (frame > 1.f)

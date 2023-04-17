@@ -11,7 +11,8 @@ namespace ZR
 
 	}
 	GeometricPrimitive::GeometricPrimitive(const std::shared_ptr<Shape>& shape,
-			const std::shared_ptr<Material>& material) : shape(shape), material(material)
+			const std::shared_ptr<Material>& material, const std::shared_ptr<AreaLight>& areaLight) :
+			shape(shape), material(material), areaLight(areaLight)
 	{
 		primitiveMemory += sizeof(*this);
 	}

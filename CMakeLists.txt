@@ -68,7 +68,7 @@ add_executable(
         src/texture/texture.hpp
         src/texture/texture.cpp
         src/texture/ConstantTexture.hpp
-        src/texture/ConstantTexture.cpp src/core/ZRender.cpp)
+        src/texture/ConstantTexture.cpp src/core/ZRender.cpp src/light/light.cpp src/light/light.hpp src/light/PointLight.cpp src/light/PointLight.hpp src/light/DiffuseAreaLight.cpp src/light/DiffuseAreaLight.hpp src/material/Fresnel.cpp src/material/Fresnel.hpp src/material/mirror.cpp src/material/mirror.hpp src/Integrator/WhittedIntegrator.cpp src/Integrator/WhittedIntegrator.hpp)
 
 target_include_directories(ZRenderer PRIVATE ${STB_INCLUDE_DIRS})
 target_link_libraries(ZRenderer PRIVATE

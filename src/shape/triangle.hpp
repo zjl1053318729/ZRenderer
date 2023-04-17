@@ -48,6 +48,7 @@ namespace ZR
 				bool testAlphaTexture = true) const override;
 		bool IntersectP(const Ray& ray, bool testAlphaTexture = true) const override;
 		double Area() const override;
+		Interaction Sample(const Eigen::Vector2d& u, double* pdf) const;
 	private:
 		// Triangle Private Methods
 		void GetUVs(Eigen::Vector2d uv[3]) const;

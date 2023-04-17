@@ -24,9 +24,9 @@ namespace ZR
 	{
 	public:
 		// SamplerIntegrator Public Methods
-		SamplerIntegrator(Camera* camera,
+		SamplerIntegrator(std::shared_ptr<const Camera> camera,
 				std::shared_ptr<Sampler> sampler,
-				const Bounds2i& pixelBounds, Buffer m_FrameBuffer)
+				const Bounds2i& pixelBounds, Buffer& m_FrameBuffer)
 				: camera(camera), sampler(sampler), pixelBounds(pixelBounds), m_FrameBuffer(m_FrameBuffer)
 		{
 		}
@@ -34,6 +34,11 @@ namespace ZR
 		{
 		}
 		void Render(const Scene& scene, double& timeConsume);
+		virtual Spectrum Li(const Ray& ray, const Scene& scene, Sampler& sampler, int depth = 0) const;
+		Spectrum SpecularReflect(const Ray& ray,
+				const SurfaceInteraction& isect,
+				const Scene& scene, Sampler& sampler,
+				int depth) const;
 
 	protected:
 		// SamplerIntegrator Protected Data

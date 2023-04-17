@@ -59,6 +59,12 @@ namespace ZR
 
 	class Material;
 
+	class Light;
+
+	class AreaLight;
+
+	class VisibilityTester;
+
 	static constexpr double Pi = 3.14159265358979323846;
 	static constexpr double InvPi = 0.31830988618379067154;
 	static constexpr double Inv2Pi = 0.15915494309189533577;
@@ -87,5 +93,11 @@ namespace ZR
 	double Lerp(double t, double a, double b);
 	int Mod(int a, int b);
 	double MaxComponent(Eigen::Vector3d _v);
+	uint64_t FloatToBits(double f);
+	double BitsToFloat(uint64_t ui);
+	double NextFloatUp(double v);
+	double NextFloatDown(double v);
+	Eigen::Vector3d FaceForward(Eigen::Vector3d a, Eigen::Vector3d b);
+	bool isZero(double x);
 
 }

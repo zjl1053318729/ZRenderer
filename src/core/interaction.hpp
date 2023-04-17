@@ -11,6 +11,9 @@ namespace ZR
 {
 	class BSDF;
 
+	Eigen::Vector3d OffsetRayOrigin(const Eigen::Vector3d& p, const Eigen::Vector3d& pError,
+			const Eigen::Vector3d& n, const Eigen::Vector3d& w);
+
 	struct Interaction
 	{
 		Eigen::Vector3d position, wo, normal, pError;
@@ -28,8 +31,33 @@ namespace ZR
 				  normal(_n)
 		{
 		}
+		Interaction(const Eigen::Vector3d& p, const Eigen::Vector3d& wo, double time)
+				: position(p), time(time), wo(wo)
+		{
+		}
+		Interaction(const Eigen::Vector3d& p, double time)
+				: position(p), time(time)
+		{
+		}
+		Ray SpawnRay(const Eigen::Vector3d& d) const
+		{
+			Eigen::Vector3d o = OffsetRayOrigin(position, pError, normal, d);
+			return Ray(o, d, Infinity, time);
+		}
+		Ray SpawnRayTo(const Eigen::Vector3d& p2) const
+		{
+			Eigen::Vector3d origin = OffsetRayOrigin(position, pError, normal, p2 - position);
+			Eigen::Vector3d d = p2 - position;
+			return Ray(origin, d, 1 - 1e-6, time);
+		}
+		Ray SpawnRayTo(const Interaction& it) const
+		{
+			Eigen::Vector3d origin = OffsetRayOrigin(position, pError, normal, it.position - position);
+			Eigen::Vector3d target = OffsetRayOrigin(it.position, it.pError, it.normal, origin - it.position);
+			Eigen::Vector3d d = target - origin;
+			return Ray(origin, d, 1 - 1e-6, time);
+		}
 	};
-
 
 
 	class SurfaceInteraction : public Interaction
@@ -60,7 +88,7 @@ namespace ZR
 			Eigen::Vector3d n;
 			Eigen::Vector3d dpdu, dpdv;
 			Eigen::Vector3d dndu, dndv;
-		}shading;
+		} shading;
 	};
 
 
