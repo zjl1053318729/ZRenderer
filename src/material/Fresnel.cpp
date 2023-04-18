@@ -11,7 +11,7 @@ namespace ZR
 		if (!entering)
 		{
 			std::swap(etaI, etaT);
-			cosThetaI = std::abs(cosThetaI);
+			cosThetaI = std::fabs(cosThetaI);
 		}
 
 		// Compute _cosThetaT_ using Snell's law
@@ -58,7 +58,7 @@ namespace ZR
 
 	Spectrum FresnelConductor::Evaluate(double cosThetaI) const
 	{
-		return FrConductor(std::abs(cosThetaI), etaI, etaT, k);
+		return FrConductor(std::fabs(cosThetaI), etaI, etaT, k);
 	}
 	Spectrum FresnelDielectric::Evaluate(double cosThetaI) const
 	{

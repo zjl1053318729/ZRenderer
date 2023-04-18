@@ -16,12 +16,6 @@ namespace ZR
 		if (!scene.Intersect(ray, &isect))
 		{
 			for (const auto& light: scene.lights) L += light->Le(ray);
-			if (depth <= 2)
-			{
-				Spectrum LL;
-				LL[2] = 0.8;
-				return LL;
-			}
 			return L;
 		}
 
@@ -37,7 +31,7 @@ namespace ZR
 		if (!isect.bsdf) return Li(isect.SpawnRay(ray.direction), scene, sampler, depth);
 
 		// Compute emitted light if ray hit an area light source
-		//L += isect.Le(wo);
+		L += isect.Le(wo);
 
 		// Add contribution of each light source
 		for (const auto& light: scene.lights)

@@ -15,6 +15,7 @@
 #include "../Integrator/WhittedIntegrator.hpp"
 #include "../core/perspective.hpp"
 #include "../material/mirror.hpp"
+#include "../light/SkyBox.hpp"
 
 const int WIDTH = 800, HEIGHT = 800;
 
@@ -46,9 +47,9 @@ int main()
 	floorColor[1] = 0.3;
 	floorColor[2] = 0.9;
 	ZR::Spectrum dragonColor;
-	dragonColor[0] = 0.0;
+	dragonColor[0] = 0.1;
 	dragonColor[1] = 1.0;
-	dragonColor[2] = 0.0;
+	dragonColor[2] = 0.1;
 	std::shared_ptr<ZR::Texture<ZR::Spectrum>> KdDragon = std::make_shared<ZR::ConstantTexture<ZR::Spectrum>>(
 			dragonColor);
 	std::shared_ptr<ZR::Texture<ZR::Spectrum>> KdFloor = std::make_shared<ZR::ConstantTexture<ZR::Spectrum>>(
@@ -107,7 +108,7 @@ int main()
 	for (int i = 0; i < plyi->nTriangles; ++i)
 		prims.push_back(std::make_shared<ZR::GeometricPrimitive>(tris[i], dragonMaterial, nullptr));
 	for (int i = 0; i < nTrianglesFloor; ++i)
-		prims.push_back(std::make_shared<ZR::GeometricPrimitive>(trisFloor[i], mirrorMaterial, nullptr));
+		prims.push_back(std::make_shared<ZR::GeometricPrimitive>(trisFloor[i], floorMaterial, nullptr));
 
 	//面光源
 	std::cerr << "Init AreaLight\n";
@@ -142,10 +143,10 @@ int main()
 	std::shared_ptr<ZR::AreaLight> area;
 	for (int i = 0; i < nTrianglesAreaLight; ++i)
 	{
-		area = std::make_shared<ZR::DiffuseAreaLight>(tri_Object2World_AreaLight, ZR::Spectrum(2.5), 10,
+		area = std::make_shared<ZR::DiffuseAreaLight>(tri_Object2World_AreaLight, ZR::Spectrum(2), 10,
 				trisAreaLight[i], false);
-		lights.push_back(area);
-		prims.push_back(std::make_shared<ZR::GeometricPrimitive>(trisAreaLight[i], whiteLightMaterial, area));
+//		lights.push_back(area);
+//		prims.push_back(std::make_shared<ZR::GeometricPrimitive>(trisAreaLight[i], floorMaterial, area));
 	}
 
 //	ZR::Spectrum LightI(15);
@@ -157,15 +158,24 @@ int main()
 	//agg = std::make_unique<ZR::BVHAccel>(prims,1);
 	agg = new ZR::BVHAccel(prims, 1);
 
+	//无限环境光源
+	std::cerr << "Init SkyBoxLight...\n";
+	ZR::Transform SkyBoxToWorld;
+	Eigen::Vector3d SkyBoxCenter(0.0, 0.0, 0.0);
+	double SkyBoxRadius = 10.0;
+	std::shared_ptr<ZR::Light> skyBoxLight =
+			std::make_shared<ZR::SkyBoxLight>(SkyBoxToWorld, SkyBoxCenter, SkyBoxRadius, "HDR.hdr", 1);
+	lights.push_back(skyBoxLight);
+
 	//生成采样器
 	std::cerr << "Init Sampler\n";
 	ZR::Bounds2i imageBound(Eigen::Vector2i(0, 0), Eigen::Vector2i(WIDTH, HEIGHT));
-	std::shared_ptr<ZR::ClockRandSampler> sampler = std::make_unique<ZR::ClockRandSampler>(8, imageBound);
+	std::shared_ptr<ZR::ClockRandSampler> sampler = std::make_unique<ZR::ClockRandSampler>(64, imageBound);
 
 	std::unique_ptr<ZR::Scene> worldScene = std::make_unique<ZR::Scene>(agg, lights);
 	ZR::Bounds2i ScreenBound(Eigen::Vector2i(0, 0), Eigen::Vector2i(WIDTH, HEIGHT));
 
-	std::shared_ptr<ZR::Integrator> integrator = std::make_shared<ZR::WhittedIntegrator>(8, cam, sampler, ScreenBound,
+	std::shared_ptr<ZR::Integrator> integrator = std::make_shared<ZR::WhittedIntegrator>(16, cam, sampler, ScreenBound,
 			buffer);
 
 

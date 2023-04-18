@@ -12,7 +12,7 @@ namespace ZR
 {
 	void SamplerIntegrator::Render(const Scene& scene, double& timeConsume)
 	{
-		time_t st,ed;
+		time_t st, ed;
 		st = clock();
 		Eigen::Vector3d a1 = scene.WorldBound().pMin, a2 = scene.WorldBound().pMax;
 		std::cerr << a1.x() << " " << a1.y() << " " << a1.z() << "\n";
@@ -36,25 +36,24 @@ namespace ZR
 
 				ZR::CameraSample cs;
 				ZR::Ray r;
-				//colObj = Li(r, scene, *pixel_sampler, 0);
 
 				do
 				{
 					cs = pixel_sampler->GetCameraSample(pixel);
 					camera->GenerateRay(cs, &r);
 					colObj += Li(r, scene, *pixel_sampler, 0);
-				}while(pixel_sampler->StartNextSample());
+				} while (pixel_sampler->StartNextSample());
 
 				colObj /= (double)pixel_sampler->samplesPerPixel;
 
 
 				m_FrameBuffer(i, j) = colObj;
-
 			}
+			std::cerr<<100.0*i/pixelBounds.pMax.x()<<"\n";
 			//std::cout << "\n";
 		}
 		ed = clock();
-		timeConsume = (ed-st)/1000.0;
+		timeConsume = (ed - st) / 1000.0;
 		std::cerr << "cntt " << cntt << "\n";
 	}
 	Spectrum SamplerIntegrator::SpecularReflect(

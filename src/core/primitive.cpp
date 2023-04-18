@@ -6,6 +6,8 @@
 
 namespace ZR
 {
+	static long long primitiveMemory = 0;
+
 	Primitive::~Primitive()
 	{
 
@@ -39,5 +41,21 @@ namespace ZR
 		if (material)
 			material->ComputeScatteringFunctions(isect, mode,
 					allowMultipleLobes);
+	}
+	const AreaLight* GeometricPrimitive::GetAreaLight() const
+	{
+		return areaLight.get();
+	}
+	const Material* GeometricPrimitive::GetMaterial() const
+	{
+		return material.get();
+	}
+	const AreaLight* Aggregate::GetAreaLight() const
+	{
+		return nullptr;
+	}
+	const Material* Aggregate::GetMaterial() const
+	{
+		return nullptr;
 	}
 }

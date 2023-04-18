@@ -76,6 +76,7 @@ namespace ZR
 				const Ray& ray,
 				bool allowMultipleLobes = false,
 				TransportMode mode = TransportMode::Radiance);
+		Spectrum Le(const Eigen::Vector3d& w) const;
 
 		const Primitive* primitive = nullptr;
 		std::shared_ptr<BSDF> bsdf = nullptr;

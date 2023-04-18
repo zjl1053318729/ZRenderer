@@ -8,7 +8,7 @@ find_package(Eigen3 REQUIRED)
 find_package(TBB REQUIRED)
 find_package(assimp REQUIRED)
 
-find_path(STB_INCLUDE_DIRS "stb_c_lexer.h")
+#find_path(STB_INCLUDE_DIRS "stb_c_lexer.h")
 
 add_executable(
         ZRenderer src/main/main.cpp
@@ -68,9 +68,9 @@ add_executable(
         src/texture/texture.hpp
         src/texture/texture.cpp
         src/texture/ConstantTexture.hpp
-        src/texture/ConstantTexture.cpp src/core/ZRender.cpp src/light/light.cpp src/light/light.hpp src/light/PointLight.cpp src/light/PointLight.hpp src/light/DiffuseAreaLight.cpp src/light/DiffuseAreaLight.hpp src/material/Fresnel.cpp src/material/Fresnel.hpp src/material/mirror.cpp src/material/mirror.hpp src/Integrator/WhittedIntegrator.cpp src/Integrator/WhittedIntegrator.hpp)
+        src/texture/ConstantTexture.cpp src/core/ZRender.cpp src/light/light.cpp src/light/light.hpp src/light/PointLight.cpp src/light/PointLight.hpp src/light/DiffuseAreaLight.cpp src/light/DiffuseAreaLight.hpp src/material/Fresnel.cpp src/material/Fresnel.hpp src/material/mirror.cpp src/material/mirror.hpp src/Integrator/WhittedIntegrator.cpp src/Integrator/WhittedIntegrator.hpp src/light/SkyBox.cpp src/light/SkyBox.hpp src/ext/stb/stb_image.h src/ext/stb/stb_image_resize.h src/ext/stb/stb_image_write.h)
 
-target_include_directories(ZRenderer PRIVATE ${STB_INCLUDE_DIRS})
+#target_include_directories(ZRenderer PRIVATE ${STB_INCLUDE_DIRS})
 target_link_libraries(ZRenderer PRIVATE
         Eigen3::Eigen
         TBB::tbb TBB::tbbmalloc TBB::tbbmalloc_proxy

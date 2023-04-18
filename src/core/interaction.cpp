@@ -2,6 +2,7 @@
 
 #include "interaction.hpp"
 #include "../material/reflection.hpp"
+#include "../light/DiffuseAreaLight.hpp"
 
 namespace ZR
 {
@@ -51,4 +52,10 @@ namespace ZR
 		}
 		return po;
 	}
+	Spectrum SurfaceInteraction::Le(const Eigen::Vector3d& w) const
+	{
+		const AreaLight* area = primitive->GetAreaLight();
+		return area ? area->L(*this, w) : Spectrum(0.f);
+	}
+
 }

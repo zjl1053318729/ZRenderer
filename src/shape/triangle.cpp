@@ -170,7 +170,7 @@ namespace ZR
 		double maxE = MaxComponent(abs(Eigen::Vector3d(e0, e1, e2)));
 		double deltaT = 3 *
 						(gamma(3) * maxE * maxZt + deltaE * maxZt + deltaZ * maxE) *
-						std::abs(invDet);
+						std::fabs(invDet);
 		if (t <= deltaT) return false;
 
 		// Compute triangle partial derivatives
@@ -182,18 +182,19 @@ namespace ZR
 		Eigen::Vector3d dp02 = p0 - p2, dp12 = p1 - p2;
 		double determinant = duv02[0] * duv12[1] - duv02[1] * duv12[0];
 		bool degenerateUV = std::fabs(determinant) < 1e-6;
-		if (!degenerateUV) {
+		if (!degenerateUV)
+		{
 			double invdet = 1 / determinant;
 			dpdu = (duv12[1] * dp02 - duv02[1] * dp12) * invdet;
 			dpdv = (-duv12[0] * dp02 + duv02[0] * dp12) * invdet;
 		}
 		// Compute error bounds for triangle intersection
 		double xAbsSum =
-				(std::abs(b0 * p0.x()) + std::abs(b1 * p1.x()) + std::abs(b2 * p2.x()));
+				(std::fabs(b0 * p0.x()) + std::fabs(b1 * p1.x()) + std::fabs(b2 * p2.x()));
 		double yAbsSum =
-				(std::abs(b0 * p0.y()) + std::abs(b1 * p1.y()) + std::abs(b2 * p2.y()));
+				(std::fabs(b0 * p0.y()) + std::fabs(b1 * p1.y()) + std::fabs(b2 * p2.y()));
 		double zAbsSum =
-				(std::abs(b0 * p0.z()) + std::abs(b1 * p1.z()) + std::abs(b2 * p2.z()));
+				(std::fabs(b0 * p0.z()) + std::fabs(b1 * p1.z()) + std::fabs(b2 * p2.z()));
 		Eigen::Vector3d pError = gamma(7) * Eigen::Vector3d(xAbsSum, yAbsSum, zAbsSum);
 		Eigen::Vector2d uvHit = b0 * uv[0] + b1 * uv[1] + b2 * uv[2];
 		Eigen::Vector3d pHit = b0 * p0 + b1 * p1 + b2 * p2;
@@ -305,7 +306,7 @@ namespace ZR
 		double maxE = MaxComponent(abs(Eigen::Vector3d(e0, e1, e2)));
 		double deltaT = 3 *
 						(gamma(3) * maxE * maxZt + deltaE * maxZt + deltaZ * maxE) *
-						std::abs(invDet);
+						std::fabs(invDet);
 		if (t <= deltaT) return false;
 
 

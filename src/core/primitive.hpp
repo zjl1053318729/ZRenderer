@@ -8,8 +8,6 @@
 
 namespace ZR
 {
-	static long long primitiveMemory = 0;
-
 	class Primitive
 	{
 	public:
@@ -17,6 +15,8 @@ namespace ZR
 		virtual Bounds3 WorldBound() const = 0;
 		virtual bool Intersect(const Ray& r, SurfaceInteraction*) const = 0;
 		virtual bool IntersectP(const Ray& r) const = 0;
+		virtual const AreaLight* GetAreaLight() const = 0;
+		virtual const Material* GetMaterial() const = 0;
 		virtual void ComputeScatteringFunctions(
 				SurfaceInteraction* isect,
 				TransportMode mode,
@@ -35,6 +35,8 @@ namespace ZR
 		virtual void ComputeScatteringFunctions(SurfaceInteraction* isect,
 				TransportMode mode,
 				bool allowMultipleLobes) const;
+		virtual const AreaLight* GetAreaLight() const;
+		virtual const Material* GetMaterial() const;
 
 	private:
 		std::shared_ptr<Shape> shape;
@@ -51,7 +53,8 @@ namespace ZR
 				bool allowMultipleLobes) const
 		{
 		}
-
+		virtual const AreaLight* GetAreaLight() const;
+		virtual const Material* GetMaterial() const;
 	};
 
 }
