@@ -57,6 +57,10 @@ namespace ZR
 			Eigen::Vector3d d = target - origin;
 			return Ray(origin, d, 1 - 1e-6, time);
 		}
+		bool IsSurfaceInteraction() const
+		{
+			return !(isZero(normal.x()) && isZero(normal.y()) && isZero(normal.z()));
+		}
 	};
 
 
@@ -71,7 +75,7 @@ namespace ZR
 				const Eigen::Vector3d& dndu, const Eigen::Vector3d& dndv, double time,
 				const Shape* sh,
 				int faceIndex = 0);
-		~SurfaceInteraction();
+		//~SurfaceInteraction();
 		void ComputeScatteringFunctions(
 				const Ray& ray,
 				bool allowMultipleLobes = false,
@@ -84,7 +88,7 @@ namespace ZR
 		Eigen::Vector3d dpdu, dpdv;
 		Eigen::Vector3d dndu, dndv;
 		const Shape* shape = nullptr;
-		struct _shading
+		struct
 		{
 			Eigen::Vector3d n;
 			Eigen::Vector3d dpdu, dpdv;

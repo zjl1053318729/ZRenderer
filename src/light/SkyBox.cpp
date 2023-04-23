@@ -6,13 +6,13 @@
 
 namespace ZR
 {
-	Spectrum HDRtoLDR(Spectrum &c, double exposure)
+	Spectrum HDRtoLDR(Spectrum& c, double exposure)
 	{
 		double InvExposure = 1.0 / (1.0 - exposure);
 		double temp_c[3];
-		temp_c [0] = 1.0 - exp(-c[0] * InvExposure);
-		temp_c [1] = 1.0 - exp(-c[1] * InvExposure);
-		temp_c [2] = 1.0 - exp(-c[2] * InvExposure);
+		temp_c[0] = 1.0 - exp(-c[0] * InvExposure);
+		temp_c[1] = 1.0 - exp(-c[1] * InvExposure);
+		temp_c[2] = 1.0 - exp(-c[2] * InvExposure);
 		return Spectrum::FromRGB(temp_c);
 	}
 	void get_sphere_uv(const Eigen::Vector3d& p, double& u, double& v)

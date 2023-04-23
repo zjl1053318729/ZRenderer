@@ -12,6 +12,10 @@ namespace ZR
 		Eigen::Vector3d* vertexArray;
 		int* vertexIndices;
 		plyInfo(std::string filePath);
-
+		void Release()
+		{
+			delete[] vertexIndices;
+			delete[] vertexArray;
+		}
 	};
 }

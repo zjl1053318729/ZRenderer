@@ -99,5 +99,23 @@ namespace ZR
 	double NextFloatDown(double v);
 	Eigen::Vector3d FaceForward(Eigen::Vector3d a, Eigen::Vector3d b);
 	bool isZero(double x);
+	template<typename Predicate>
+	int FindInterval(int size, const Predicate& pred)
+	{
+		int first = 0, len = size;
+		while (len > 0)
+		{
+			int half = len >> 1, middle = first + half;
+			// Bisect range based on value of _pred_ at _middle_
+			if (pred(middle))
+			{
+				first = middle + 1;
+				len -= half + 1;
+			}
+			else
+				len = half;
+		}
+		return Clamp(first - 1, 0, size - 2);
+	}
 
 }

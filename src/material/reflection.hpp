@@ -86,7 +86,8 @@ namespace ZR
 		}
 		void Add(BxDF* b)
 		{
-			bxdfs[nBxDFs++] = b;
+			bxdfs.push_back(std::shared_ptr<BxDF>(b));
+			nBxDFs++;
 		}
 		int NumComponents(BxDFType flags = BSDF_ALL) const;
 		Eigen::Vector3d WorldToLocal(const Eigen::Vector3d& v) const;
@@ -106,14 +107,13 @@ namespace ZR
 		// BSDF Public Data
 		const double eta;
 		// BSDF Private Methods
-		~BSDF();
 	private:
 		// BSDF Private Data
 		const Eigen::Vector3d ns, ng;
 		const Eigen::Vector3d ss, ts;
 		int nBxDFs = 0;
 		static constexpr int MaxBxDFs = 8;
-		BxDF* bxdfs[MaxBxDFs];
+		std::vector<std::shared_ptr<BxDF>> bxdfs;
 	};
 
 

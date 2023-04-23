@@ -68,7 +68,7 @@ add_executable(
         src/texture/texture.hpp
         src/texture/texture.cpp
         src/texture/ConstantTexture.hpp
-        src/texture/ConstantTexture.cpp src/core/ZRender.cpp src/light/light.cpp src/light/light.hpp src/light/PointLight.cpp src/light/PointLight.hpp src/light/DiffuseAreaLight.cpp src/light/DiffuseAreaLight.hpp src/material/Fresnel.cpp src/material/Fresnel.hpp src/material/mirror.cpp src/material/mirror.hpp src/Integrator/WhittedIntegrator.cpp src/Integrator/WhittedIntegrator.hpp src/light/SkyBox.cpp src/light/SkyBox.hpp src/ext/stb/stb_image.h src/ext/stb/stb_image_resize.h src/ext/stb/stb_image_write.h)
+        src/texture/ConstantTexture.cpp src/core/ZRender.cpp src/light/light.cpp src/light/light.hpp src/light/PointLight.cpp src/light/PointLight.hpp src/light/DiffuseAreaLight.cpp src/light/DiffuseAreaLight.hpp src/material/Fresnel.cpp src/material/Fresnel.hpp src/material/mirror.cpp src/material/mirror.hpp src/Integrator/WhittedIntegrator.cpp src/Integrator/WhittedIntegrator.hpp src/light/SkyBox.cpp src/light/SkyBox.hpp src/ext/stb/stb_image.h src/ext/stb/stb_image_resize.h src/ext/stb/stb_image_write.h src/light/LightDistribution.cpp src/light/LightDistribution.hpp src/Integrator/DirectLightingIntegrator.cpp src/Integrator/DirectLightingIntegrator.hpp src/Integrator/PathIntegrator.cpp src/Integrator/PathIntegrator.hpp)
 
 #target_include_directories(ZRenderer PRIVATE ${STB_INCLUDE_DIRS})
 target_link_libraries(ZRenderer PRIVATE

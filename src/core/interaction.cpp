@@ -30,11 +30,11 @@ namespace ZR
 	{
 		primitive->ComputeScatteringFunctions(this, mode, allowMultipleLobes);
 	}
-	SurfaceInteraction::~SurfaceInteraction()
-	{
-		if (bsdf)
-			bsdf->~BSDF();
-	}
+//	SurfaceInteraction::~SurfaceInteraction()
+//	{
+//		if (bsdf)
+//			bsdf->~BSDF();
+//	}
 	Eigen::Vector3d OffsetRayOrigin(const Eigen::Vector3d& p, const Eigen::Vector3d& pError,
 			const Eigen::Vector3d& n, const Eigen::Vector3d& w)
 	{

@@ -11,7 +11,7 @@ namespace ZR
 		// WhittedIntegrator Public Methods
 		WhittedIntegrator(int maxDepth, std::shared_ptr<const Camera> camera,
 				std::shared_ptr<Sampler> sampler,
-				const Bounds2i& pixelBounds, Buffer& buffer)
+				const Bounds2i& pixelBounds, Buffer* buffer)
 				: SamplerIntegrator(camera, sampler, pixelBounds, buffer), maxDepth(maxDepth)
 		{
 		}

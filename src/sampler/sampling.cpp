@@ -169,4 +169,71 @@ namespace ZR
 		double f = nf * fPdf, g = ng * gPdf;
 		return (f * f) / (f * f + g * g);
 	}
+	Distribution1D::Distribution1D(const double* f, int n) : func(f, f + n), cdf(n + 1)
+	{
+		// Compute integral of step function at $x_i$
+		cdf[0] = 0;
+		for (int i = 1; i < n + 1; ++i) cdf[i] = cdf[i - 1] + func[i - 1] / n;
+
+		// Transform step function integral into CDF
+		funcInt = cdf[n];
+		if (funcInt == 0)
+		{
+			for (int i = 1; i < n + 1; ++i) cdf[i] = double(i) / double(n);
+		}
+		else
+		{
+			for (int i = 1; i < n + 1; ++i) cdf[i] /= funcInt;
+		}
+	}
+	double Distribution1D::SampleContinuous(double u, double* pdf, int* off) const
+	{
+		// Find surrounding CDF segments and _offset_
+		int offset = FindInterval((int)cdf.size(),
+				[&](int index)
+				{ return cdf[index] <= u; });
+		if (off) *off = offset;
+		// Compute offset along CDF segment
+		double du = u - cdf[offset];
+		if ((cdf[offset + 1] - cdf[offset]) > 0)
+		{
+			//CHECK_GT(cdf[offset + 1], cdf[offset]);
+			du /= (cdf[offset + 1] - cdf[offset]);
+		}
+
+		// Compute PDF for sampled offset
+		if (pdf) *pdf = (funcInt > 0) ? func[offset] / funcInt : 0;
+
+		// Return $x\in{}[0,1)$ corresponding to sample
+		return (offset + du) / Count();
+	}
+	int Distribution1D::SampleDiscrete(double u, double* pdf, double* uRemapped) const
+	{
+		// Find surrounding CDF segments and _offset_
+		int offset = FindInterval((int)cdf.size(),
+				[&](int index)
+				{ return cdf[index] <= u; });
+		if (pdf) *pdf = (funcInt > 0) ? func[offset] / (funcInt * Count()) : 0;
+		if (uRemapped)
+			*uRemapped = (u - cdf[offset]) / (cdf[offset + 1] - cdf[offset]);
+		//if (uRemapped) CHECK(*uRemapped >= 0.f && *uRemapped <= 1.f);
+		return offset;
+	}
+	Eigen::Vector2d Distribution2D::SampleContinuous(const Eigen::Vector2d& u, double* pdf) const
+	{
+		double pdfs[2];
+		int v;
+		double d1 = pMarginal->SampleContinuous(u[1], &pdfs[1], &v);
+		double d0 = pConditionalV[v]->SampleContinuous(u[0], &pdfs[0]);
+		*pdf = pdfs[0] * pdfs[1];
+		return Eigen::Vector2d(d0, d1);
+	}
+	double Distribution2D::Pdf(const Eigen::Vector2d& p) const
+	{
+		int iu = Clamp(int(p[0] * pConditionalV[0]->Count()), 0,
+				pConditionalV[0]->Count() - 1);
+		int iv =
+				Clamp(int(p[1] * pMarginal->Count()), 0, pMarginal->Count() - 1);
+		return pConditionalV[iv]->func[iu] / pMarginal->funcInt;
+	}
 }

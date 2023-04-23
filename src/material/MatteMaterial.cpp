@@ -18,8 +18,6 @@ namespace ZR
 		{
 			if (sig == 0)
 				si->bsdf->Add(new LambertianReflection(r));
-			//else
-			//si->bsdf->Add(ARENA_ALLOC(arena, OrenNayar)(r, sig));
 		}
 	}
 }
