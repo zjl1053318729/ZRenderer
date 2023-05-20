@@ -3,6 +3,7 @@
 //
 
 #include "DiffuseAreaLight.hpp"
+#include "../sampler/sampler.hpp"
 
 namespace ZR
 {
@@ -60,5 +61,20 @@ namespace ZR
 	void DiffuseAreaLight::Pdf_Le(const Ray& ray, const Eigen::Vector3d& n, double* pdfPos,
 			double* pdfDir) const
 	{
+	}
+	void DiffuseAreaLight::generatePhoton(Eigen::Vector3d& ori, Eigen::Vector3d& dir, double& powScale)
+	{
+		double pdf;
+		Interaction inte = this->shape->Sample(Eigen::Vector2d::Random().array().abs(), &pdf);
+		ori = inte.position;
+		double phi,theta;
+		theta = ZR::random_double(0, 2 * ZR::Pi);
+		phi = ZR::random_double(0, 0.5 * ZR::Pi);
+
+		Eigen::Matrix3d rotMatrix;
+		rotMatrix = Eigen::Quaterniond::FromTwoVectors(Eigen::Vector3d(0,1,0), inte.normal).toRotationMatrix();
+		dir =  rotMatrix * Eigen::Vector3d(cos(theta)*sin(phi), cos(phi), sin(theta)*sin(phi));
+
+		powScale = dir.dot(inte.normal);
 	}
 }

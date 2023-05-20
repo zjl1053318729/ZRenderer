@@ -28,6 +28,7 @@ namespace ZR
 		if (!shape->Intersect(r, &tHit, isect)) return false;
 		r.tMax = tHit;
 		isect->primitive = this;
+		isect->is_specular = material->is_specular;
 		return true;
 	}
 	bool GeometricPrimitive::IntersectP(const Ray& r) const

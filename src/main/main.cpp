@@ -17,6 +17,7 @@
 #include "../material/mirror.hpp"
 #include "../light/SkyBox.hpp"
 #include "../Integrator/PathIntegrator.hpp"
+#include "../Integrator/PhotonTracer.hpp"
 
 const int WIDTH = 800, HEIGHT = 800;
 
@@ -32,7 +33,7 @@ int main()
 
 	std::cerr << "Init Camera\n";
 	//初始化程序
-	Eigen::Vector3d eye(0, 0, 6.0), look(0.0, 0.0, 0.0);
+	Eigen::Vector3d eye(0, 0, 5.1), look(0.0, 0.0, 0.0);
 	Eigen::Vector3d up(0.0, 1.0, 0.0);
 	ZR::Transform lookat = ZR::LookAt(eye, look, up);
 	//取逆是因为LookAt返回的是世界坐标到相机坐标系的变换
@@ -150,7 +151,7 @@ int main()
 
 	ZR::Transform tri_Object2World, tri_World2Object;
 
-	tri_Object2World = ZR::Translate(Eigen::Vector3d(0.f, -2.9f, 0.f)) * tri_Object2World;
+	tri_Object2World = ZR::Translate(Eigen::Vector3d(0.0, -3.55, 0.0)) * tri_Object2World;
 	tri_World2Object = Inverse(tri_Object2World);
 
 	std::cerr << "Read Mesh...\n";
@@ -196,7 +197,7 @@ int main()
 	for (int i = 0; i < nTrianglesAreaLight; ++i)
 	{
 		std::shared_ptr<ZR::AreaLight> area =
-				std::make_shared<ZR::DiffuseAreaLight>(tri_Object2World_AreaLight, ZR::Spectrum(5.f), 5,
+				std::make_shared<ZR::DiffuseAreaLight>(tri_Object2World_AreaLight, ZR::Spectrum(2), 5,
 						trisAreaLight[i], false);
 		lights.push_back(area);
 		prims.push_back(std::make_shared<ZR::GeometricPrimitive>(trisAreaLight[i], whiteLightMaterial, area));
@@ -220,7 +221,7 @@ int main()
 
 	std::cerr << "Init Sampler...\n";
 	ZR::Bounds2i imageBound(Eigen::Vector2i(0, 0), Eigen::Vector2i(WIDTH, HEIGHT));
-	std::shared_ptr<ZR::ClockRandSampler> sampler = std::make_unique<ZR::ClockRandSampler>(128, imageBound);
+	std::shared_ptr<ZR::ClockRandSampler> sampler = std::make_unique<ZR::ClockRandSampler>(64, imageBound);
 
 	std::cerr << "Build Scene...\n";
 	std::unique_ptr<ZR::Scene> worldScene = std::make_unique<ZR::Scene>(aggregate, lights);
@@ -228,7 +229,8 @@ int main()
 
 	std::cerr << "Build Integrator...\n";
 	std::shared_ptr<ZR::Integrator> integrator = std::make_shared<ZR::PathIntegrator>(20, cam, sampler, ScreenBound,
-			1.f, "spatial", &buffer);
+			1.0, "spatial", &buffer);
+	//std::shared_ptr<ZR::Integrator> integrator = std::make_shared<ZR::PhotonTracer>(cam, sampler, ScreenBound, &buffer, 240, 10000000);
 
 
 	std::cerr << "Start Rendering\n";
@@ -238,7 +240,7 @@ int main()
 	integrator->Render(*worldScene, frameTime);
 
 	//从buffer写入到文件
-	std::cerr << "rendering time: " << frameTime << "\n";
+	std::cerr << "rendering time: " << frameTime <<" s\n";
 	std::cerr << "writing buffer to file\n";
 	int r, g, b;
 	for (int i = 0; i < HEIGHT; i++)
@@ -246,6 +248,7 @@ int main()
 		for (int j = 0; j < WIDTH; j++)
 		{
 			//防止过曝
+			buffer(i, j).gammaCorrection();
 			r = ZR::Clamp(255.0 * buffer(i, j)[0], 0, 255);
 			g = ZR::Clamp(255.0 * buffer(i, j)[1], 0, 255);
 			b = ZR::Clamp(255.0 * buffer(i, j)[2], 0, 255);
@@ -253,6 +256,6 @@ int main()
 		}
 		std::cout << "\n";
 	}
-
+	system("pause");
 	return 0;
 }

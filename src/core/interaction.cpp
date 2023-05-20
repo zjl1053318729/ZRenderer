@@ -9,7 +9,7 @@ namespace ZR
 	SurfaceInteraction::SurfaceInteraction(const Eigen::Vector3d& p, const Eigen::Vector3d& pError,
 			const Eigen::Vector2d& uv, const Eigen::Vector3d& wo, const Eigen::Vector3d& dpdu,
 			const Eigen::Vector3d& dpdv, const Eigen::Vector3d& dndu, const Eigen::Vector3d& dndv, double time,
-			const Shape* sh, int faceIndex) :
+			const Shape* sh, int faceIndex, bool is_specular) :
 			Interaction(p, Eigen::Vector3d((dpdu.cross(dpdv)).normalized()),
 					pError, wo, time),
 			uv(uv),
@@ -17,7 +17,8 @@ namespace ZR
 			dpdv(dpdv),
 			dndu(dndu),
 			dndv(dndv),
-			shape(sh)
+			shape(sh),
+			is_specular(is_specular)
 	{
 		// Initialize shading geometry from true geometry
 		shading.n = normal;

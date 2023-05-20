@@ -75,6 +75,7 @@ namespace ZR
 				double* pdfDir) const = 0;
 		virtual void Pdf_Le(const Ray& ray, const Eigen::Vector3d& nLight, double* pdfPos,
 				double* pdfDir) const = 0;
+		virtual void generatePhoton(Eigen::Vector3d& ori, Eigen::Vector3d& dir, double& powScale) = 0;
 
 		// Light Public Data
 		const int flags;

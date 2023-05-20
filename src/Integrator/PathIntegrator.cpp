@@ -37,13 +37,6 @@ namespace ZR
 		Ray ray(r);
 		bool specularBounce = false;
 		int bounces;
-		// Added after book publication: etaScale tracks the accumulated effect
-		// of radiance scaling due to rays passing through refractive
-		// boundaries (see the derivation on p. 527 of the third edition). We
-		// track this value in order to remove it from beta when we apply
-		// Russian roulette; this is worthwhile, since it lets us sometimes
-		// avoid terminating refracted rays that are about to be refracted back
-		// out of a medium and thus have their beta value increased.
 		double etaScale = 1;
 
 		for (bounces = 0;; ++bounces)
@@ -121,9 +114,8 @@ namespace ZR
 
 			if (rrBeta.MaxComponentValue() < rrThreshold && bounces > 3)
 			{
-				double q = std::max((double).05, 1 - rrBeta.MaxComponentValue());
-				if (sampler.Get1D() < q) break;
-				beta /= 1 - q;
+				if (sampler.Get1D() < 0.125) break;
+				beta /= 0.875;
 			}
 		}
 		return L;

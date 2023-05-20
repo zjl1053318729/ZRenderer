@@ -28,7 +28,7 @@ namespace ZR
 		virtual ~Integrator()
 		{
 		}
-		virtual void Render(const Scene& scene, double& timeConsume) = 0;
+		virtual void Render(Scene& scene, double& timeConsume) = 0;
 		double IntegratorRenderTime; //渲染一次用的时间
 	};
 
@@ -46,7 +46,7 @@ namespace ZR
 		virtual void Preprocess(const Scene& scene, Sampler& sampler)
 		{
 		}
-		void Render(const Scene& scene, double& timeConsume);
+		virtual void Render(Scene& scene, double& timeConsume);
 		virtual Spectrum Li(const Ray& ray, const Scene& scene, Sampler& sampler, int depth = 0) const;
 		Spectrum SpecularReflect(const Ray& ray,
 				const SurfaceInteraction& isect,
@@ -57,7 +57,6 @@ namespace ZR
 		// SamplerIntegrator Protected Data
 		std::shared_ptr<const Camera> camera;
 
-	private:
 		// SamplerIntegrator Private Data
 		std::shared_ptr<Sampler> sampler;
 		const Bounds2i pixelBounds;

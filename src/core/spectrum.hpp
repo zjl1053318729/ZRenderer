@@ -194,6 +194,12 @@ namespace ZR
 		{
 			*this = s;
 		}
+		RGBSpectrum(double _r, double _g, double _b)
+		{
+			c[0] = _r;
+			c[1] = _g;
+			c[2] = _b;
+		}
 		static RGBSpectrum FromRGB(const double rgb[3],
 				SpectrumType type = SpectrumType::Reflectance)
 		{
@@ -228,6 +234,12 @@ namespace ZR
 		{
 			const double YWeight[3] = { 0.212671f, 0.715160f, 0.072169f };
 			return YWeight[0] * c[0] + YWeight[1] * c[1] + YWeight[2] * c[2];
+		}
+		void gammaCorrection()
+		{
+			c[0] = pow(c[0], 0.454545);
+			c[1] = pow(c[1], 0.454545);
+			c[2] = pow(c[2], 0.454545);
 		}
 	};
 }

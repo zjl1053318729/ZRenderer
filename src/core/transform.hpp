@@ -8,7 +8,6 @@ namespace ZR
 	class Transform
 	{
 	public:
-		// Transform Public Methods
 		Transform()
 		{
 			m << 1, 0, 0, 0,
@@ -53,7 +52,6 @@ namespace ZR
 		Transform operator*(const Transform& t2) const;
 		bool SwapsHandedness() const;
 	private:
-		// Transform Private Data
 		Eigen::Matrix4d m, mInv;
 	};
 

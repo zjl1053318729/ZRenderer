@@ -14,6 +14,11 @@ namespace ZR
 	Eigen::Vector3d OffsetRayOrigin(const Eigen::Vector3d& p, const Eigen::Vector3d& pError,
 			const Eigen::Vector3d& n, const Eigen::Vector3d& w);
 
+	struct scatter_record{
+		Ray specular_ray;
+		bool is_specular;
+	};
+
 	struct Interaction
 	{
 		Eigen::Vector3d position, wo, normal, pError;
@@ -74,7 +79,7 @@ namespace ZR
 				const Eigen::Vector3d& dpdu, const Eigen::Vector3d& dpdv,
 				const Eigen::Vector3d& dndu, const Eigen::Vector3d& dndv, double time,
 				const Shape* sh,
-				int faceIndex = 0);
+				int faceIndex = 0, bool is_specular = false);
 		//~SurfaceInteraction();
 		void ComputeScatteringFunctions(
 				const Ray& ray,
@@ -94,6 +99,7 @@ namespace ZR
 			Eigen::Vector3d dpdu, dpdv;
 			Eigen::Vector3d dndu, dndv;
 		} shading;
+		bool is_specular;
 	};
 
 

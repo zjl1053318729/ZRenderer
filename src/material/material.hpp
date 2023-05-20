@@ -21,5 +21,6 @@ namespace ZR
 		virtual ~Material()
 		{
 		}
+		bool is_specular;
 	};
 }

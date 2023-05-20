@@ -34,7 +34,6 @@ namespace ZR
 		{
 			return 1 / Area();
 		}
-
 		// Sample a point on the shape given a reference point |ref| and
 		// return the PDF with respect to solid angle from |ref|.
 		virtual Interaction Sample(const Interaction& ref, const Eigen::Vector2d& u, double* pdf) const;

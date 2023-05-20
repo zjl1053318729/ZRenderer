@@ -12,15 +12,16 @@
 
 namespace ZR
 {
-	std::mutex mtx;
-	void SamplerIntegrator::Render(const Scene& scene, double& timeConsume)
+
+	void SamplerIntegrator::Render(Scene& scene, double& timeConsume)
 	{
+		std::mutex mtx;
 		Preprocess(scene, *sampler);
 		time_t st, ed;
 		st = clock();
-		Eigen::Vector3d a1 = scene.WorldBound().pMin, a2 = scene.WorldBound().pMax;
-		std::cerr << a1.x() << " " << a1.y() << " " << a1.z() << "\n";
-		std::cerr << a2.x() << " " << a2.y() << " " << a2.z() << "\n";
+//		Eigen::Vector3d a1 = scene.WorldBound().pMin, a2 = scene.WorldBound().pMax;
+//		std::cerr << a1.x() << " " << a1.y() << " " << a1.z() << "\n";
+//		std::cerr << a2.x() << " " << a2.y() << " " << a2.z() << "\n";
 
 		int progress = 0;
 		const int num_threads = 64, thread_interval = pixelBounds.pMax.y() * pixelBounds.pMax.x() / num_threads;
@@ -52,7 +53,7 @@ namespace ZR
 				(*m_FrameBuffer)(ii, jj) = colObj;
 				mtx.lock();
 				progress++;
-				if(progress%100==0) std::cerr<<100.0 * progress / (pixelBounds.pMax.y() * pixelBounds.pMax.x())<<"\n";
+				if(progress%6400==0) std::cerr<<100.0 * progress / (pixelBounds.pMax.y() * pixelBounds.pMax.x())<<"\n";
 				mtx.unlock();
 			}
 		};
@@ -68,42 +69,6 @@ namespace ZR
 			th[i].join();
 		}
 
-
-//		int cntt = 0;
-//		//Eigen::Vector3d Light(10, 10, -10);
-//		for (int i = 0; i < pixelBounds.pMax.x(); i++)
-//		{
-//			//std::cerr<<i<<"\n";
-//			for (int j = 0; j < pixelBounds.pMax.y(); j++)
-//			{
-//
-//				double u = double(i + ZR::random_double()) / double(pixelBounds.pMax.x());
-//				double v = double(j + ZR::random_double()) / double(pixelBounds.pMax.y());
-//				int offset = (pixelBounds.pMax.x() * j + i);
-//
-//				std::unique_ptr<ZR::Sampler> pixel_sampler = sampler->Clone(offset);
-//				Eigen::Vector2i pixel(j, i);
-//				ZR::Spectrum colObj(0.0);
-//				pixel_sampler->StartPixel(pixel);
-//
-//				ZR::CameraSample cs;
-//				ZR::Ray r;
-//				do
-//				{
-//					cs = pixel_sampler->GetCameraSample(pixel);
-//					camera->GenerateRay(cs, &r);
-//					colObj += Li(r, scene, *pixel_sampler, 0);
-//				}while(pixel_sampler->StartNextSample());
-//
-//				colObj /= (double)pixel_sampler->samplesPerPixel;
-//				(*m_FrameBuffer)(i, j) = colObj;
-//
-//				//std::cerr << 100.0 * j / pixelBounds.pMax.y() << "\n";
-//			}
-//			std::cerr << 100.0 * i / pixelBounds.pMax.x() << "\n";
-//			//std::cout << "\n";
-//
-//		}
 		ed = clock();
 		timeConsume = (ed - st) / 1000.0;
 	}

@@ -25,6 +25,7 @@ namespace ZR
 				double* pdfDir) const;
 		void Pdf_Le(const Ray&, const Eigen::Vector3d&, double* pdfPos,
 				double* pdfDir) const;
+		void generatePhoton(Eigen::Vector3d& ori, Eigen::Vector3d& dir, double& powScale);
 
 	protected:
 		// DiffuseAreaLight Protected Data

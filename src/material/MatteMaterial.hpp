@@ -15,6 +15,7 @@ namespace ZR
 				const std::shared_ptr<Texture<double>>& bumpMap)
 				: Kd(Kd), sigma(sigma), bumpMap(bumpMap)
 		{
+			is_specular = false;
 		}
 		void ComputeScatteringFunctions(SurfaceInteraction* si,
 				TransportMode mode,

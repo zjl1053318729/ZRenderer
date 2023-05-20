@@ -31,4 +31,10 @@ namespace ZR
 		*pdfPos = 0;
 		*pdfDir = UniformSpherePdf();
 	}
+	void PointLight::generatePhoton(Eigen::Vector3d& ori, Eigen::Vector3d& dir, double& powScale)
+	{
+		ori = this->pLight;
+		dir = Eigen::Vector3d::Random().normalized();
+		powScale = 1;
+	}
 }

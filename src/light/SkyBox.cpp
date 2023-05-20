@@ -87,5 +87,9 @@ namespace ZR
 		}
 		return ZR::HDRtoLDR(Col, 0.9);
 	}
+	void SkyBoxLight::generatePhoton(Eigen::Vector3d& ori, Eigen::Vector3d& dir, double& powScale)
+	{
+
+	}
 
 }

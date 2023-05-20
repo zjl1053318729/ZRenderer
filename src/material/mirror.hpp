@@ -16,6 +16,7 @@ namespace ZR
 		{
 			Kr = r;
 			bumpMap = bump;
+			is_specular = true;
 		}
 		void ComputeScatteringFunctions(SurfaceInteraction* si, TransportMode mode,
 				bool allowMultipleLobes) const;
